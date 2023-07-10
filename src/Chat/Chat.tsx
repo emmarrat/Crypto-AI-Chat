@@ -36,7 +36,7 @@ const Chat = () => {
         }}>
           <Paper
             component="form"
-            sx={{display: 'flex', alignItems: 'center', width: '100%'}}
+            sx={{display: 'flex', alignItems: 'center', width: '100%', border: '1px solid #d4d7d9', boxShadow: '7px 3px 15px 0px #C1C1C1'}}
             onSubmit={sendMessage}
           >
             <InputBase
@@ -45,7 +45,7 @@ const Chat = () => {
               onChange={changeMessage}
               sx={{flex: 1, padding: '10px 15px'}}
               placeholder="Ask me about crypto"
-              inputProps={{'aria-label': 'type your message'}}
+              inputProps={{'aria-label': 'Type your message'}}
               required
             />
             <div style={{padding: '5px'}}>
