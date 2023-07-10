@@ -144,7 +144,7 @@ const Sidebar: React.FC<Props> = ({children}) => {
           </IconButton>
         </DrawerHeader>
         <List sx={{px: '10px'}}>
-          {HISTORY_ITEMS.map((text, index) => (
+          {HISTORY_ITEMS.map((text) => (
             <ListItem key={text} disablePadding sx={{display: 'block'}}>
               <Tooltip title={text} placement="right">
                 <ListItemButton
