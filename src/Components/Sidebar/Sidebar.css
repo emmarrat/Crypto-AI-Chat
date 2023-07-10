@@ -1,0 +1,14 @@
+.history-title {
+    margin: 0;
+    text-align: center;
+    font-weight: 300;
+    padding-left: 18px;
+    display: flex;
+    align-items: center;
+}
+.history-item {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

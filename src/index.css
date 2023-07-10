@@ -1,5 +1,5 @@
 @font-face {
-  font-family: Gilroy;
+  font-family: 'Gilroy';
   src: url("./assets/fonts/Gilroy-Regular.ttf");
 }
 
@@ -10,12 +10,6 @@ html {
 
 body {
   margin: 0;
-  font-family: Gilroy, serif;
-}
-.container {
-  max-width: 1032px;
-  margin: 0 auto;
-  padding: 0 21px;
 }
 
 main {

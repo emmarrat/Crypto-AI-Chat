@@ -1,0 +1,1 @@
+export const HISTORY_ITEMS = ['Starting chat', 'Crypto news for last week', 'Doggy coin is still relevant?']
