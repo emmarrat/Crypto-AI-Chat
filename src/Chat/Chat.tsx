@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import Sidebar from "../Components/Sidebar/Sidebar";
-import {Box, Button, IconButton, InputBase, Paper, TextField} from "@mui/material";
+import {IconButton, InputBase, Paper} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 
 const Chat = () => {
