@@ -31,6 +31,7 @@
     scrollbar-color: transparent transparent;
     overflow: auto;
     overflow-x: hidden;
+    margin-bottom: 7px;
 }
 
 .chat__msg-wrapp::-webkit-scrollbar {
@@ -51,7 +52,7 @@
 }
 
 .chat__msg {
-    padding: 5px;
+    padding: 8px 10px;
     border-radius: 10px;
     color: #fff;
 }

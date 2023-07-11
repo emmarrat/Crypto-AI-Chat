@@ -1,7 +1,7 @@
 import { HistoryChats, Chat, Message } from '../../types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { CHATS, HISTORY_CHATS } from '../../database';
+import { CHATS, HISTORY_CHATS } from '../../constants';
 
 interface ChatState {
   chatsHistory: HistoryChats[];

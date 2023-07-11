@@ -19,7 +19,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import { Theme } from '@mui/material/styles';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
-import { HISTORY_CHATS } from '../../database';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { HistoryChats } from '../../types';
 import { selectChatFromHistory, selectHistory } from '../../Features/Chat/chatsSlice';
