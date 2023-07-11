@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import Sidebar from "../Components/Sidebar/Sidebar";
 import {IconButton, InputBase, Paper} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+import './Chat.css';
 
 const Chat = () => {
   const [messageText, setMessageText] = useState('');
@@ -28,22 +29,17 @@ const Chat = () => {
   return (
     <>
       <Sidebar>
-        <div style={{
-          maxWidth: '800px',
-          display: 'flex',
-          justifyContent: 'center',
-          margin: '0 auto'
-        }}>
+        <div className="chat__container">
           <Paper
             component="form"
-            sx={{display: 'flex', alignItems: 'center', width: '100%', border: '1px solid #d4d7d9', boxShadow: '7px 3px 15px 0px #C1C1C1'}}
             onSubmit={sendMessage}
+            className="chat__input-wrapp"
           >
             <InputBase
+              className="chat__input"
               type="text"
               value={messageText}
               onChange={changeMessage}
-              sx={{flex: 1, padding: '10px 15px'}}
               placeholder="Ask me about crypto"
               inputProps={{'aria-label': 'Type your message'}}
               required
