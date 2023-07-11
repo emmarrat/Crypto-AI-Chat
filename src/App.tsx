@@ -1,10 +1,8 @@
 import React from 'react';
-import Chat from "./Chat/Chat";
+import Chat from './Features/Chat/Chat';
 
 function App() {
-  return (
-     <Chat/>
-  );
+  return <Chat />;
 }
 
 export default App;

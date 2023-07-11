@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Sidebar from '../Components/Sidebar/Sidebar';
+import Sidebar from '../../Components/Sidebar/Sidebar';
 import { IconButton, InputBase, Paper } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import './Chat.css';
-import { MOCK_DATA_FIFTEEN } from '../constants';
+import { MOCK_DATA_FIFTEEN } from '../../constants';
 
 interface Message {
   id: string;
@@ -58,39 +58,37 @@ const Chat = () => {
   };
 
   return (
-    <>
-      <Sidebar>
-        <div className="chat__container">
-          <div className="chat__block chat__msg-wrapp" ref={containerRef}>
-            {renderMessages()}
-          </div>
-          <div className="chat__block chat__form-wrapp">
-            <Paper component="form" onSubmit={sendMessage} className="chat__form">
-              <InputBase
-                className="chat__input"
-                type="text"
-                value={messageText}
-                onChange={(e) => setMessageText(e.target.value)}
-                placeholder="Ask me about crypto"
-                inputProps={{ 'aria-label': 'Type your message' }}
-                required
-                autoFocus
-              />
-              <div style={{ padding: '5px' }}>
-                <IconButton
-                  type="submit"
-                  disabled={messageText.length === 0}
-                  sx={{ p: '10px', color: 'secondary.dark' }}
-                  aria-label="send message"
-                >
-                  <SendIcon />
-                </IconButton>
-              </div>
-            </Paper>
-          </div>
+    <Sidebar>
+      <div className="chat__container">
+        <div className="chat__block chat__msg-wrapp" ref={containerRef}>
+          {renderMessages()}
         </div>
-      </Sidebar>
-    </>
+        <div className="chat__block chat__form-wrapp">
+          <Paper component="form" onSubmit={sendMessage} className="chat__form">
+            <InputBase
+              className="chat__input"
+              type="text"
+              value={messageText}
+              onChange={(e) => setMessageText(e.target.value)}
+              placeholder="Ask me about crypto"
+              inputProps={{ 'aria-label': 'Type your message' }}
+              required
+              autoFocus
+            />
+            <div style={{ padding: '5px' }}>
+              <IconButton
+                type="submit"
+                disabled={messageText.length === 0}
+                sx={{ p: '10px', color: 'secondary.dark' }}
+                aria-label="send message"
+              >
+                <SendIcon />
+              </IconButton>
+            </div>
+          </Paper>
+        </div>
+      </div>
+    </Sidebar>
   );
 };
 
