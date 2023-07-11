@@ -12,7 +12,7 @@ interface ChatState {
 
 const initialState: ChatState = {
   chatsHistory: HISTORY_CHATS,
-  chat: CHATS[0],
+  chat: null,
   fetching: false,
   sending: false,
 };

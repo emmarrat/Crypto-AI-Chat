@@ -1,12 +1,9 @@
 .chat__container {
-    max-width: 48rem;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    margin: 0 auto;
     position: relative;
-    padding-top: 50px;
 }
 
 .chat__block {
@@ -15,7 +12,6 @@
 
 .chat__msg-wrapp {
     display: flex;
-    padding: 0 5px;
     height: 77vh;
 }
 
@@ -24,14 +20,16 @@
     align-items: center;
 }
 
+.chat__empty-msg {
+    color: #ffff;
+}
+
 .chat__started {
     flex-direction: column;
-    gap: 10px;
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
     overflow: auto;
     overflow-x: hidden;
-    margin-bottom: 7px;
 }
 
 .chat__msg-wrapp::-webkit-scrollbar {
@@ -52,56 +50,62 @@
 }
 
 .chat__msg {
-    padding: 8px 10px;
-    border-radius: 10px;
+    padding: 25px 10px;
     color: #fff;
 }
 
-.chat__msg-user, .chat__msg-assistant {
-    position: relative;
-}
-
 .chat__msg-user {
-    background: #4793de;
+    background: #343434;
 }
 
 .chat__msg-assistant {
-    background: #132D46;
+    background: transparent;
 }
 
-.chat__msg-user:before {
-    content: '';
-    position: absolute;
-    right: -8px;
-    bottom: -13px;
-    rotate: 324deg;
-    border: 9px solid transparent;
-    border-top: 13px solid #4793de;
+.chat__item {
+    display: block;
+    max-width: 50rem;
+    margin: 0 auto;
 }
 
-.chat__msg-assistant:before {
-    content: '';
-    position: absolute;
-    left: -8px;
-    bottom: -14px;
-    rotate: 36deg;
-    border: 9px solid transparent;
-    border-top: 13px solid #132D46;
+.chat__item-inner {
+    display: flex;
+    gap: 10px;
+}
+
+.chat__text {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.chat__avatar {
+    width: 35px;
+    height: 35px;
+    background: #7a7777;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
 }
 
 .chat__form-wrapp {
-    background: #fff;
     position: sticky;
-    bottom: 0;
-    height: 10vh;
+    bottom: 20px;
+    border-radius: 20px !important;
+    margin-top: 40px;
+    background: #444444 !important;
 }
 
 .chat__form {
     display: flex;
     align-items: center;
     width: 100%;
-    border: 1px solid #d4d7d9 !important;
-    box-shadow: 7px 3px 15px 0 #C1C1C1 !important;
+    border: none !important;
+    background: #444444 !important;
+    box-shadow: 22px 22px 31px #1a1a1a, -22px -22px 31px #2a2929 !important;
 }
 
 .chat__input {

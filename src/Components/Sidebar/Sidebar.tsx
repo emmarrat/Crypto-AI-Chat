@@ -9,10 +9,8 @@ import {
   ListItem,
   ListItemButton,
   styled,
-  Toolbar,
   Tooltip,
 } from '@mui/material';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -22,13 +20,14 @@ import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { HistoryChats } from '../../types';
 import { selectChatFromHistory, selectHistory } from '../../Features/Chat/chatsSlice';
+import { COLORS } from '../../constants';
 
 const drawerWidth = 260;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
-  backgroundColor: '#132D46',
-  color: '#fff',
+  backgroundColor: '#171717',
+  color: COLORS.lightGreen,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -37,11 +36,11 @@ const openedMixin = (theme: Theme): CSSObject => ({
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
-  backgroundColor: '#132D46',
-  color: '#fff',
+  backgroundColor: '#171717',
+  color: COLORS.lightGreen,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
+    duration: 300,
   }),
   overflowX: 'hidden',
   width: 0,
@@ -56,28 +55,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
-}));
-
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
 }));
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -104,13 +81,18 @@ const Sidebar: React.FC<Props> = ({ children }) => {
   const dispatch = useAppDispatch();
   const historyList = useAppSelector(selectHistory);
   const [open, setOpen] = React.useState(true);
+  const [showMenuButton, setShowMenuButton] = React.useState(false); // New state
 
   const handleDrawerOpen = () => {
     setOpen(true);
+    setShowMenuButton(false);
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+    setTimeout(() => {
+      setShowMenuButton(true);
+    }, 300);
   };
 
   const onChatClick = (chat: HistoryChats) => {
@@ -120,34 +102,29 @@ const Sidebar: React.FC<Props> = ({ children }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        open={open}
-        sx={{
-          backgroundColor: 'transparent',
-          boxShadow: 'none',
+      <div
+        style={{
+          position: 'fixed',
+          display: showMenuButton ? 'block' : 'none',
+          top: '20px',
+          left: '50px',
+          zIndex: 9999,
         }}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              backgroundColor: '#fff',
-              marginRight: 5,
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon
-              sx={{
-                color: '#132D46',
-              }}
-            />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={{
+            backgroundColor: '#171717',
+            marginRight: 5,
+            ...(open && { display: 'none' }),
+          }}
+        >
+          <MenuIcon color="info" />
+        </IconButton>
+      </div>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
           <h4 className="history-title">
@@ -165,22 +142,22 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                 <ListItemButton
                   sx={{
                     minHeight: 50,
-                    justifyContent: open ? 'initial' : 'center',
+                    justifyContent: 'start',
                   }}
                   onClick={() => onChatClick(chat)}
                 >
                   <ChatBubbleOutlineRoundedIcon sx={{ mr: 1 }} fontSize="small" />
-                  <p className="history-item" style={{ opacity: open ? 1 : 0 }}>
-                    {chat.title}
-                  </p>
+                  <p className="history-item">{chat.title}</p>
                 </ListItemButton>
               </Tooltip>
             </ListItem>
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {/*<DrawerHeader />*/}
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, backgroundColor: '#2a2a2a', height: '100vh' }}
+      >
         {children}
       </Box>
     </Box>
