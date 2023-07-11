@@ -19,7 +19,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import { Theme } from '@mui/material/styles';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
-import { HISTORY_ITEMS } from '../../constants';
+import { HISTORY_CHATS } from '../../database';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { HistoryChats } from '../../types';
+import { selectChatFromHistory, selectHistory } from '../../Features/Chat/chatsSlice';
 
 const drawerWidth = 260;
 
@@ -99,6 +102,8 @@ interface Props {
   children: ReactNode;
 }
 const Sidebar: React.FC<Props> = ({ children }) => {
+  const dispatch = useAppDispatch();
+  const historyList = useAppSelector(selectHistory);
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
@@ -107,6 +112,10 @@ const Sidebar: React.FC<Props> = ({ children }) => {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const onChatClick = (chat: HistoryChats) => {
+    dispatch(selectChatFromHistory(chat));
   };
 
   return (
@@ -151,18 +160,19 @@ const Sidebar: React.FC<Props> = ({ children }) => {
           </IconButton>
         </DrawerHeader>
         <List sx={{ px: '10px' }}>
-          {HISTORY_ITEMS.map((text) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <Tooltip title={text} placement="right">
+          {historyList.map((chat) => (
+            <ListItem key={chat.id} disablePadding sx={{ display: 'block' }}>
+              <Tooltip title={chat.title} placement="right">
                 <ListItemButton
                   sx={{
                     minHeight: 50,
                     justifyContent: open ? 'initial' : 'center',
                   }}
+                  onClick={() => onChatClick(chat)}
                 >
                   <ChatBubbleOutlineRoundedIcon sx={{ mr: 1 }} fontSize="small" />
                   <p className="history-item" style={{ opacity: open ? 1 : 0 }}>
-                    {text}
+                    {chat.title}
                   </p>
                 </ListItemButton>
               </Tooltip>
@@ -171,7 +181,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {/*<DrawerHeader/>*/}
+        {/*<DrawerHeader />*/}
         {children}
       </Box>
     </Box>

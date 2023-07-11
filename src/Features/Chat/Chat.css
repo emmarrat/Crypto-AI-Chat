@@ -6,6 +6,7 @@
     align-items: center;
     margin: 0 auto;
     position: relative;
+    padding-top: 50px;
 }
 
 .chat__block {
@@ -14,15 +15,22 @@
 
 .chat__msg-wrapp {
     display: flex;
+    padding: 0 5px;
+    height: 77vh;
+}
+
+.chat__empty {
+    justify-content: center;
+    align-items: center;
+}
+
+.chat__started {
     flex-direction: column;
     gap: 10px;
-    padding: 0 5px;
-    height: 80vh;
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
     overflow: auto;
     overflow-x: hidden;
-
 }
 
 .chat__msg-wrapp::-webkit-scrollbar {

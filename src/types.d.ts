@@ -1,12 +1,12 @@
-export interface History {
+export interface HistoryChats {
   id: string;
   title: string;
-  messagesId: string;
+  chatId: string;
 }
 
-export interface Messages {
+export interface Chat {
   id: string;
-  messages: Message[];
+  chat: Message[];
 }
 export interface Message {
   id: string;

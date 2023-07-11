@@ -1,10 +1,5 @@
 export const apiURL = 'HERE GONNA BE SOME REAL URL';
 
-export const HISTORY_ITEMS = [
-  'Starting chat',
-  'Crypto news for last week',
-  'Doggy coin is still relevant?',
-];
 export const COLORS = {
   darkBlue: '#132D46',
   lightGreen: '#48FF9E',
@@ -139,5 +134,33 @@ export const MOCK_DATA_FIFTEEN = [
     id: '15',
     role: 'user',
     text: 'What is the future outlook for cryptocurrencies?',
+  },
+];
+
+export const MOCK_DATA_FIVE = [
+  {
+    id: '1',
+    role: 'user',
+    text: 'What is the current price of Bitcoin?',
+  },
+  {
+    id: '2',
+    role: 'assistant',
+    text: 'The current price of Bitcoin is $40,000.',
+  },
+  {
+    id: '3',
+    role: 'user',
+    text: 'How does blockchain technology work?',
+  },
+  {
+    id: '4',
+    role: 'assistant',
+    text: 'Blockchain technology uses a decentralized and distributed ledger to record and verify transactions.',
+  },
+  {
+    id: '5',
+    role: 'user',
+    text: 'Can you recommend any resources to learn more about cryptocurrency trading?',
   },
 ];

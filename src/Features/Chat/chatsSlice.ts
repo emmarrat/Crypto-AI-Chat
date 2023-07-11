@@ -1,17 +1,18 @@
-import { Messages } from '../../types';
-import { createSlice } from '@reduxjs/toolkit';
+import { HistoryChats, Chat, Message } from '../../types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
+import { CHATS, HISTORY_CHATS } from '../../database';
 
 interface ChatState {
-  chatsHistory: History[];
-  chat: Messages | null;
+  chatsHistory: HistoryChats[];
+  chat: Chat | null;
   fetching: boolean;
   sending: boolean;
 }
 
 const initialState: ChatState = {
-  chatsHistory: [],
-  chat: null,
+  chatsHistory: HISTORY_CHATS,
+  chat: CHATS[0],
   fetching: false,
   sending: false,
 };
@@ -19,12 +20,29 @@ const initialState: ChatState = {
 export const chatsSlice = createSlice({
   name: 'chats',
   initialState,
-  reducers: {},
+  reducers: {
+    selectChatFromHistory: (state, { payload: chat }: PayloadAction<HistoryChats>) => {
+      const existingIndex = state.chatsHistory.find((item) => {
+        return item.id === chat.id;
+      });
+      if (existingIndex) {
+        const existingChat = CHATS.find((chat) => {
+          return chat.id === existingIndex.chatId;
+        });
+        state.chat = existingChat || null;
+      }
+    },
+    addNewMessage: (state, { payload: message }: PayloadAction<Message>) => {
+      if (state.chat) {
+        state.chat.chat.push(message);
+      }
+    },
+  },
   extraReducers: (builder) => {},
 });
 
 export const chatsReducer = chatsSlice.reducer;
-export const {} = chatsSlice.actions;
+export const { selectChatFromHistory, addNewMessage } = chatsSlice.actions;
 
 export const selectHistory = (state: RootState) => state.chats.chatsHistory;
 export const selectChat = (state: RootState) => state.chats.chat;
