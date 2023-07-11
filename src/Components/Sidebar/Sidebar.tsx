@@ -123,6 +123,7 @@ const Sidebar: React.FC<Props> = ({children}) => {
             onClick={handleDrawerOpen}
             edge="start"
             sx={{
+              backgroundColor: '#fff',
               marginRight: 5,
               ...(open && {display: 'none'}),
             }}
@@ -164,7 +165,7 @@ const Sidebar: React.FC<Props> = ({children}) => {
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader/>
+        {/*<DrawerHeader/>*/}
         {children}
       </Box>
     </Box>
