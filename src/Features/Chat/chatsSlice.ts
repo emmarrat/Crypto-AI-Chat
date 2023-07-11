@@ -54,12 +54,25 @@ export const chatsSlice = createSlice({
         state.selectedChat = newChat;
       }
     },
+    startNewChat: (state) => {
+      const newHistoryChat: HistoryChats = {
+        id: generateId(),
+        title: '',
+        chatId: generateId(),
+      };
+      const newChat: Chat = {
+        id: newHistoryChat.chatId,
+        chat: [],
+      };
+      state.chat = newChat.chat;
+      state.selectedChat = newChat;
+    },
   },
   extraReducers: (builder) => {},
 });
 
 export const chatsReducer = chatsSlice.reducer;
-export const { selectChatFromHistory, addNewMessage } = chatsSlice.actions;
+export const { selectChatFromHistory, addNewMessage, startNewChat } = chatsSlice.actions;
 
 export const selectHistory = (state: RootState) => state.chats.chatsHistory;
 export const selectChat = (state: RootState) => state.chats.chat;

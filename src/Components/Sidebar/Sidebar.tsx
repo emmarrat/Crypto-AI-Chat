@@ -2,8 +2,10 @@ import React, { ReactNode } from 'react';
 import './Sidebar.css';
 import {
   Box,
+  Button,
   CssBaseline,
   CSSObject,
+  Divider,
   IconButton,
   List,
   ListItem,
@@ -19,7 +21,11 @@ import { Theme } from '@mui/material/styles';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { HistoryChats } from '../../types';
-import { selectChatFromHistory, selectHistory } from '../../Features/Chat/chatsSlice';
+import {
+  selectChatFromHistory,
+  selectHistory,
+  startNewChat,
+} from '../../Features/Chat/chatsSlice';
 import { COLORS } from '../../constants';
 
 const drawerWidth = 260;
@@ -27,7 +33,7 @@ const drawerWidth = 260;
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   backgroundColor: '#171717',
-  color: COLORS.lightGreen,
+  color: '#fff',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -37,7 +43,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
 
 const closedMixin = (theme: Theme): CSSObject => ({
   backgroundColor: '#171717',
-  color: COLORS.lightGreen,
+  color: '#fff',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: 300,
@@ -53,7 +59,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
 }));
 
@@ -99,6 +104,11 @@ const Sidebar: React.FC<Props> = ({ children }) => {
     dispatch(selectChatFromHistory(chat));
   };
 
+  const onNewChatClick = () => {
+    dispatch(startNewChat());
+    console.log('clicked');
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -126,23 +136,46 @@ const Sidebar: React.FC<Props> = ({ children }) => {
         </IconButton>
       </div>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-          <h4 className="history-title">
-            <HistoryRoundedIcon sx={{ mr: 1 }} />
-            History
-          </h4>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon sx={{ color: '#ffff' }} />
-          </IconButton>
+        <DrawerHeader sx={{ display: 'flex', flexDirection: 'column' }}>
+          <div className="sidebar__header sidebar__buttons">
+            <div className="sidebar__chat-btn">
+              <Button variant="contained" color="warning" onClick={onNewChatClick}>
+                Start new chat
+              </Button>
+            </div>
+            <Button
+              variant="contained"
+              onClick={handleDrawerClose}
+              sx={{ padding: '6px 8px', minWidth: 0 }}
+              color="warning"
+            >
+              <ChevronLeftIcon sx={{ color: '#ffff' }} />
+            </Button>
+          </div>
+          <div
+            style={{
+              backgroundColor: '#fff',
+              margin: '10px 0',
+              height: '0.5px',
+              width: '100%',
+            }}
+          />
+          <div className="sidebar__header">
+            <h4 className="history-title">
+              <HistoryRoundedIcon sx={{ mr: 1 }} />
+              History
+            </h4>
+          </div>
         </DrawerHeader>
-        <List sx={{ px: '10px' }}>
+        <List sx={{ padding: '0 20px' }}>
           {historyList.map((chat) => (
-            <ListItem key={chat.id} disablePadding sx={{ display: 'block' }}>
+            <ListItem key={chat.id} disablePadding sx={{ display: 'block', padding: 0 }}>
               <Tooltip title={chat.title} placement="right">
                 <ListItemButton
                   sx={{
                     minHeight: 50,
                     justifyContent: 'start',
+                    padding: 0,
                   }}
                   onClick={() => onChatClick(chat)}
                 >

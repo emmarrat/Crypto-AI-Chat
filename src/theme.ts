@@ -14,6 +14,11 @@ const theme: Theme = createTheme({
       main: '#fff',
       dark: '#afaeae',
     },
+    warning: {
+      main: '#2a2a2a',
+      light: '#343434',
+      dark: '#444444',
+    },
   },
   typography: {
     fontFamily: 'Gilroy, serif',
