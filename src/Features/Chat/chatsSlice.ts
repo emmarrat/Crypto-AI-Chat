@@ -2,17 +2,20 @@ import { HistoryChats, Chat, Message } from '../../types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { CHATS, HISTORY_CHATS } from '../../constants';
+import generateId from '../../generateId';
 
 interface ChatState {
   chatsHistory: HistoryChats[];
-  chat: Chat | null;
+  selectedChat: Chat | null;
+  chat: Message[];
   fetching: boolean;
   sending: boolean;
 }
 
 const initialState: ChatState = {
   chatsHistory: HISTORY_CHATS,
-  chat: null,
+  selectedChat: null,
+  chat: [],
   fetching: false,
   sending: false,
 };
@@ -29,12 +32,26 @@ export const chatsSlice = createSlice({
         const existingChat = CHATS.find((chat) => {
           return chat.id === existingIndex.chatId;
         });
-        state.chat = existingChat || null;
+        state.chat = existingChat?.chat || [];
+        state.selectedChat = existingChat || null;
       }
     },
     addNewMessage: (state, { payload: message }: PayloadAction<Message>) => {
-      if (state.chat) {
-        state.chat.chat.push(message);
+      if (state.chat.length > 0) {
+        state.chat.push(message);
+      } else {
+        const newHistoryChat: HistoryChats = {
+          id: generateId(),
+          title: message.text.slice(0, 20),
+          chatId: generateId(),
+        };
+        const newChat: Chat = {
+          id: newHistoryChat.chatId,
+          chat: [message],
+        };
+        state.chatsHistory.push(newHistoryChat);
+        state.chat = newChat.chat;
+        state.selectedChat = newChat;
       }
     },
   },

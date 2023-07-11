@@ -8,6 +8,7 @@ import { addNewMessage, selectChat } from './chatsSlice';
 import SmartToyRoundedIcon from '@mui/icons-material/SmartToyRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import { COLORS } from '../../constants';
+import generateId from '../../generateId';
 const Chat = () => {
   const dispatch = useAppDispatch();
   const existingChat = useAppSelector(selectChat);
@@ -16,17 +17,7 @@ const Chat = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [existingChat?.chat]);
-
-  const generateId = () => {
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#%-&*';
-    let id = '';
-    for (let i = 0; i < 20; i++) {
-      id += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return id;
-  };
+  }, [existingChat]);
 
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,12 +33,12 @@ const Chat = () => {
   };
 
   const renderMessages = () => {
-    if (!existingChat || existingChat.chat.length === 0) {
+    if (existingChat.length === 0) {
       return (
         <h3 className="chat__empty-msg">Please send a message to start the dialog...</h3>
       );
     }
-    return existingChat.chat.map((message) => (
+    return existingChat.map((message) => (
       <div key={message.id} className={`chat__msg chat__msg-${message.role}`}>
         <div className="chat__item">
           <div className="chat__item-inner">
@@ -58,7 +49,6 @@ const Chat = () => {
                 <SmartToyRoundedIcon sx={{ color: COLORS.lightGreen }} />
               )}
             </div>
-
             <p className="chat__text"> {message.text}</p>
           </div>
         </div>
@@ -71,7 +61,7 @@ const Chat = () => {
       <div className="chat__container">
         <div
           className={`chat__block chat__msg-wrapp ${
-            existingChat && existingChat.chat.length > 0 ? 'chat__started' : 'chat__empty'
+            existingChat.length > 0 ? 'chat__started' : 'chat__empty'
           }`}
           ref={containerRef}
         >
