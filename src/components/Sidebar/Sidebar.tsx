@@ -5,7 +5,6 @@ import {
   Button,
   CssBaseline,
   CSSObject,
-  Divider,
   IconButton,
   List,
   ListItem,
