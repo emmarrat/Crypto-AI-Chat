@@ -8,6 +8,7 @@ interface ChatState {
   chatsHistory: HistoryChats[];
   selectedChat: Chat | null;
   chat: Message[];
+  allChats: Chat[];
   fetching: boolean;
   sending: boolean;
 }
@@ -16,6 +17,7 @@ const initialState: ChatState = {
   chatsHistory: HISTORY_CHATS,
   selectedChat: null,
   chat: [],
+  allChats: CHATS,
   fetching: false,
   sending: false,
 };
@@ -29,7 +31,7 @@ export const chatsSlice = createSlice({
         return item.id === chat.id;
       });
       if (existingIndex) {
-        const existingChat = CHATS.find((chat) => {
+        const existingChat = state.allChats.find((chat) => {
           return chat.id === existingIndex.chatId;
         });
         state.chat = existingChat?.chat || [];
@@ -39,6 +41,12 @@ export const chatsSlice = createSlice({
     addNewMessage: (state, { payload: message }: PayloadAction<Message>) => {
       if (state.chat.length > 0) {
         state.chat.push(message);
+        const selectedChatIndex = state.allChats.findIndex(
+          (chat) => chat.id === state.selectedChat?.id,
+        );
+        if (selectedChatIndex !== -1) {
+          state.allChats[selectedChatIndex].chat.push(message);
+        }
       } else {
         const newHistoryChat: HistoryChats = {
           id: generateId(),
@@ -49,11 +57,13 @@ export const chatsSlice = createSlice({
           id: newHistoryChat.chatId,
           chat: [message],
         };
-        state.chatsHistory.push(newHistoryChat);
+        state.chatsHistory = [...state.chatsHistory, newHistoryChat];
+        state.allChats = [...state.allChats, newChat];
         state.chat = newChat.chat;
         state.selectedChat = newChat;
       }
     },
+
     startNewChat: (state) => {
       const newHistoryChat: HistoryChats = {
         id: generateId(),

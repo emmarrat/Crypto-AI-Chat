@@ -30,6 +30,7 @@
     scrollbar-color: transparent transparent;
     overflow: auto;
     overflow-x: hidden;
+    /*margin-top: 78px;*/
 }
 
 .chat__msg-wrapp::-webkit-scrollbar {
@@ -50,7 +51,7 @@
 }
 
 .chat__msg {
-    padding: 25px 10px;
+    padding: 25px 15px;
     color: #fff;
 }
 
@@ -71,6 +72,7 @@
 .chat__item-inner {
     display: flex;
     gap: 10px;
+    padding: 0 15px;
 }
 
 .chat__text {
@@ -94,9 +96,8 @@
 .chat__form-wrapp {
     position: sticky;
     bottom: 20px;
-    border-radius: 20px !important;
+    padding: 0 10px;
     margin-top: 40px;
-    background: #444444 !important;
 }
 
 .chat__form {
@@ -111,4 +112,40 @@
 .chat__input {
     flex: 1;
     padding: 10px 15px;
+}
+
+.loading-animation {
+    display: flex;
+    align-items: center;
+}
+
+.circle {
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    border-radius: 50%;
+    background: #48FF9E;
+    animation: bounce 0.45s infinite alternate;
+}
+
+@keyframes bounce {
+    0% {
+        /*transform: translateY(0);*/
+        scale: 0.7;
+        background: #48FF9E;
+    }
+    100% {
+        /*transform: translateY(-10px);*/
+        scale: 1.1;
+        background: #34af6e;
+
+    }
+}
+
+.circle:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.circle:nth-child(3) {
+    animation-delay: 0.4s;
 }

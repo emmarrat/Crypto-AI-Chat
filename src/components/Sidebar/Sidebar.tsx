@@ -25,8 +25,7 @@ import {
   selectChatFromHistory,
   selectHistory,
   startNewChat,
-} from '../../Features/Chat/chatsSlice';
-import { COLORS } from '../../constants';
+} from '../../features/Chat/chatsSlice';
 
 const drawerWidth = 260;
 
@@ -106,7 +105,6 @@ const Sidebar: React.FC<Props> = ({ children }) => {
 
   const onNewChatClick = () => {
     dispatch(startNewChat());
-    console.log('clicked');
   };
 
   return (
@@ -117,7 +115,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
           position: 'fixed',
           display: showMenuButton ? 'block' : 'none',
           top: '20px',
-          left: '50px',
+          left: '40px',
           zIndex: 9999,
         }}
       >
@@ -139,7 +137,12 @@ const Sidebar: React.FC<Props> = ({ children }) => {
         <DrawerHeader sx={{ display: 'flex', flexDirection: 'column' }}>
           <div className="sidebar__header sidebar__buttons">
             <div className="sidebar__chat-btn">
-              <Button variant="contained" color="warning" onClick={onNewChatClick}>
+              <Button
+                className="sidebar__btn"
+                variant="contained"
+                color="warning"
+                onClick={onNewChatClick}
+              >
                 Start new chat
               </Button>
             </div>
@@ -149,7 +152,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
               sx={{ padding: '6px 8px', minWidth: 0 }}
               color="warning"
             >
-              <ChevronLeftIcon sx={{ color: '#ffff' }} />
+              <ChevronLeftIcon className="sidebar__btn" sx={{ color: '#ffff' }} />
             </Button>
           </div>
           <div
@@ -167,7 +170,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
             </h4>
           </div>
         </DrawerHeader>
-        <List sx={{ padding: '0 20px' }}>
+        <List>
           {historyList.map((chat) => (
             <ListItem key={chat.id} disablePadding sx={{ display: 'block', padding: 0 }}>
               <Tooltip title={chat.title} placement="right">
@@ -175,8 +178,9 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                   sx={{
                     minHeight: 50,
                     justifyContent: 'start',
-                    padding: 0,
+                    padding: '0 20px',
                   }}
+                  className="sidebar__btn"
                   onClick={() => onChatClick(chat)}
                 >
                   <ChatBubbleOutlineRoundedIcon sx={{ mr: 1 }} fontSize="small" />

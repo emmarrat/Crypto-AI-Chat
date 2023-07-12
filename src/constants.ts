@@ -170,7 +170,7 @@ export const MOCK_DATA_FIVE = [
 export const HISTORY_CHATS: HistoryChats[] = [
   {
     id: '1',
-    title: 'Starting chat',
+    title: 'Which crypto coin i should buy?',
     chatId: '1',
   },
   {

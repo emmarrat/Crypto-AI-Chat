@@ -30,3 +30,6 @@
     justify-content: center;
     width: 100%;
 }
+.sidebar__btn:hover {
+    color: #48FF9E !important;
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Sidebar from '../../Components/Sidebar/Sidebar';
+import Sidebar from '../../components/Sidebar/Sidebar';
 import { IconButton, InputBase, Paper } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import './Chat.css';
@@ -13,6 +13,7 @@ const Chat = () => {
   const dispatch = useAppDispatch();
   const existingChat = useAppSelector(selectChat);
   const [messageText, setMessageText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,6 +25,11 @@ const Chat = () => {
     const userMessage = { role: 'user', text: messageText, id: generateId() };
     dispatch(addNewMessage(userMessage));
     setMessageText('');
+
+    setIsLoading(true); // Данная конструкция создана только для демонстрации пока нет бека
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
   };
 
   const scrollToBottom = () => {
@@ -35,7 +41,9 @@ const Chat = () => {
   const renderMessages = () => {
     if (existingChat.length === 0) {
       return (
-        <h3 className="chat__empty-msg">Please send a message to start the dialog...</h3>
+        <h3 className="chat__msg chat__empty-msg">
+          Please send a message to start the dialog...
+        </h3>
       );
     }
     return existingChat.map((message) => (
@@ -56,6 +64,33 @@ const Chat = () => {
     ));
   };
 
+  const renderLoadingAnimation = () => {
+    if (isLoading) {
+      return (
+        <div className="chat__msg chat__msg-assistant">
+          <div
+            style={{
+              maxWidth: '50rem',
+              margin: 'auto',
+            }}
+          >
+            <div className="chat__item-inner">
+              <div className="chat__avatar">
+                <SmartToyRoundedIcon sx={{ color: COLORS.lightGreen }} />
+              </div>
+              <div className="loading-animation">
+                <div className="circle" />
+                <div className="circle" />
+                <div className="circle" />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Sidebar>
       <div className="chat__container">
@@ -66,6 +101,7 @@ const Chat = () => {
           ref={containerRef}
         >
           {renderMessages()}
+          {renderLoadingAnimation()}
         </div>
         <div className="chat__block chat__form-wrapp chat__item">
           <Paper
