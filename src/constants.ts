@@ -1,6 +1,7 @@
 import { Chat, HistoryChats } from './types';
-
 export const apiURL = 'HERE GONNA BE SOME REAL URL';
+
+export const LIMIT_MESSAGES = 5; // УСЛОВНОЕ ЗНАЧЕНИЕ
 
 export const COLORS = {
   darkBlue: '#132D46',
@@ -179,7 +180,7 @@ export const HISTORY_CHATS: HistoryChats[] = [
   },
   {
     id: '3',
-    title: 'Doggy coin is still relevant?',
+    title: 'Dogecoin is still relevant?',
     chatId: '3',
   },
 ];

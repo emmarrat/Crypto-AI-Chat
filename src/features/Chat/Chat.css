@@ -22,6 +22,7 @@
 
 .chat__empty-msg {
     color: #ffff;
+    text-align: center;
 }
 
 .chat__started {
@@ -147,4 +148,8 @@
 
 .circle:nth-child(3) {
     animation-delay: 0.4s;
+}
+
+.chat__modal-text {
+    display: inline;
 }

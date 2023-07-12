@@ -1,7 +1,7 @@
 import { HistoryChats, Chat, Message } from '../../types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { CHATS, HISTORY_CHATS } from '../../constants';
+import { CHATS, HISTORY_CHATS, LIMIT_MESSAGES } from '../../constants';
 import generateId from '../../generateId';
 
 interface ChatState {
@@ -11,6 +11,7 @@ interface ChatState {
   allChats: Chat[];
   fetching: boolean;
   sending: boolean;
+  totalMessages: number;
 }
 
 const initialState: ChatState = {
@@ -20,6 +21,7 @@ const initialState: ChatState = {
   allChats: CHATS,
   fetching: false,
   sending: false,
+  totalMessages: 0,
 };
 
 export const chatsSlice = createSlice({
@@ -62,6 +64,9 @@ export const chatsSlice = createSlice({
         state.chat = newChat.chat;
         state.selectedChat = newChat;
       }
+      if (message.role === 'user' && state.totalMessages <= LIMIT_MESSAGES) {
+        state.totalMessages += 1;
+      }
     },
 
     startNewChat: (state) => {
@@ -88,3 +93,4 @@ export const selectHistory = (state: RootState) => state.chats.chatsHistory;
 export const selectChat = (state: RootState) => state.chats.chat;
 export const selectFetchingChats = (state: RootState) => state.chats.fetching;
 export const selectSendingMsg = (state: RootState) => state.chats.sending;
+export const selectTotalMessages = (state: RootState) => state.chats.totalMessages;

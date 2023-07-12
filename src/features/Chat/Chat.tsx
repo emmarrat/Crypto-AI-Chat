@@ -1,24 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { IconButton, InputBase, Paper } from '@mui/material';
+import { Button, Divider, IconButton, InputBase, Paper } from '@mui/material';
 import './Chat.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addNewMessage, selectChat } from './chatsSlice';
+import { addNewMessage, selectChat, selectTotalMessages } from './chatsSlice';
 import SmartToyRoundedIcon from '@mui/icons-material/SmartToyRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import SendIcon from '@mui/icons-material/Send';
-import { COLORS } from '../../constants';
+import BoltIcon from '@mui/icons-material/Bolt';
+import { COLORS, LIMIT_MESSAGES } from '../../constants';
 import generateId from '../../generateId';
+import ChatModal from '../../components/ChatModal/ChatModal';
+
 const Chat = () => {
   const dispatch = useAppDispatch();
   const existingChat = useAppSelector(selectChat);
+  const totalMessages = useAppSelector(selectTotalMessages);
+
   const [messageText, setMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollToBottom();
-  }, [existingChat]);
+    if (totalMessages === LIMIT_MESSAGES) {
+      setIsModalOpen(true);
+    }
+  }, [existingChat, totalMessages]);
 
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +80,10 @@ const Chat = () => {
     ));
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   const renderLoadingAnimation = () => {
     if (isLoading) {
       return (
@@ -99,54 +112,86 @@ const Chat = () => {
   };
 
   return (
-    <Sidebar>
-      <div className="chat__container">
-        <div
-          className={`chat__block chat__msg-wrapp ${
-            existingChat.length > 0 ? 'chat__started' : 'chat__empty'
-          }`}
-          ref={containerRef}
-        >
-          {renderMessages()}
-          {renderLoadingAnimation()}
-        </div>
-        <div className="chat__block chat__form-wrapp chat__item">
-          <Paper
-            component="form"
-            onSubmit={sendMessage}
-            className="chat__form"
-            sx={{
-              border: 'none',
-            }}
-          >
-            <InputBase
-              className="chat__input"
-              type="text"
-              value={messageText}
-              onChange={(e) => setMessageText(e.target.value)}
-              placeholder="Спроси меня о крипте"
-              inputProps={{ 'aria-label': 'Type your message' }}
-              required
-              autoFocus
-              sx={{
-                color: '#fff',
-                border: 'none',
-              }}
-            />
-            <div style={{ padding: '5px' }}>
-              <IconButton
-                type="submit"
-                disabled={messageText.length === 0}
-                sx={{ p: '10px', color: 'secondary.dark' }}
-                aria-label="send message"
-              >
-                <SendIcon />
-              </IconButton>
+    <>
+      <Sidebar>
+        {totalMessages === LIMIT_MESSAGES ? (
+          <div className="chat__block chat__msg-wrapp chat__empty">
+            <h3 className="chat__msg chat__empty-msg">
+              У вас превышен лимит запросов! <br />
+              Чтобы продолжить пользоваться чат ботом, необходимо оформить подписку
+            </h3>
+          </div>
+        ) : (
+          <div className="chat__container">
+            <div
+              className={`chat__block chat__msg-wrapp ${
+                existingChat.length > 0 ? 'chat__started' : 'chat__empty'
+              }`}
+              ref={containerRef}
+            >
+              {renderMessages()}
+              {renderLoadingAnimation()}
             </div>
-          </Paper>
+            <div className="chat__block chat__form-wrapp chat__item">
+              <Paper
+                component="form"
+                onSubmit={sendMessage}
+                className="chat__form"
+                sx={{
+                  border: 'none',
+                }}
+              >
+                <InputBase
+                  className="chat__input"
+                  type="text"
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
+                  placeholder="Спроси меня о крипте"
+                  inputProps={{ 'aria-label': 'Type your message' }}
+                  required
+                  autoFocus
+                  sx={{
+                    color: '#fff',
+                    border: 'none',
+                  }}
+                  disabled={totalMessages === LIMIT_MESSAGES}
+                />
+                <div style={{ padding: '5px' }}>
+                  <IconButton
+                    type="submit"
+                    disabled={
+                      messageText.length === 0 || totalMessages === LIMIT_MESSAGES
+                    }
+                    sx={{ p: '10px', color: 'secondary.dark' }}
+                    aria-label="send message"
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </div>
+              </Paper>
+            </div>
+          </div>
+        )}
+      </Sidebar>
+      <ChatModal
+        open={isModalOpen}
+        handleClose={closeModal}
+        title="Превышен лимит запросов"
+      >
+        <div className="chat__modal-wrapp">
+          <h3 className="chat__modal-title">Вам понравился наш чат бот?</h3>
+          <p className="chat__modal-text">
+            Оформите ежемесячную подписку всего за <b>99.99 dogecoin-ов</b> в месяц и вы
+            получите <b>неограниченное количество запросов</b>{' '}
+            <BoltIcon sx={{ color: COLORS.lightGreen, verticalAlign: 'bottom' }} />
+          </p>
+          <Divider sx={{ my: 3 }} />
+          <Button variant="contained" color="secondary" sx={{ fontWeight: 'bold' }}>
+            Оформить подписку
+          </Button>
         </div>
-      </div>
-    </Sidebar>
+      </ChatModal>
+    </>
   );
 };
 
