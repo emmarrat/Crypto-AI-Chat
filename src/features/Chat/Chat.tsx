@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { IconButton, InputBase, Paper } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
 import './Chat.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addNewMessage, selectChat } from './chatsSlice';
 import SmartToyRoundedIcon from '@mui/icons-material/SmartToyRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import SendIcon from '@mui/icons-material/Send';
 import { COLORS } from '../../constants';
 import generateId from '../../generateId';
 const Chat = () => {
@@ -23,13 +23,20 @@ const Chat = () => {
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     const userMessage = { role: 'user', text: messageText, id: generateId() };
+
+    const botMessage = {
+      // Данная конструкция создана только для демонстрации пока нет бека
+      role: 'assistant',
+      text: 'i do not have access to the server, sorry :(',
+      id: generateId(),
+    };
     dispatch(addNewMessage(userMessage));
     setMessageText('');
-
     setIsLoading(true); // Данная конструкция создана только для демонстрации пока нет бека
     setTimeout(() => {
       setIsLoading(false);
-    }, 5000);
+      dispatch(addNewMessage(botMessage)); // Данная конструкция создана только для демонстрации пока нет бека
+    }, 2000);
   };
 
   const scrollToBottom = () => {
@@ -42,7 +49,7 @@ const Chat = () => {
     if (existingChat.length === 0) {
       return (
         <h3 className="chat__msg chat__empty-msg">
-          Please send a message to start the dialog...
+          Пожалуйста, отправьте сообщение для начала диалога...
         </h3>
       );
     }
@@ -117,7 +124,7 @@ const Chat = () => {
               type="text"
               value={messageText}
               onChange={(e) => setMessageText(e.target.value)}
-              placeholder="Ask me about crypto"
+              placeholder="Спроси меня о крипте"
               inputProps={{ 'aria-label': 'Type your message' }}
               required
               autoFocus

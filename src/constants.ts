@@ -12,55 +12,54 @@ export const MOCK_DATA = [
   {
     id: '1',
     role: 'user',
-    text: 'What is the latest news in the crypto market?',
+    text: 'Какие последние новости на рынке криптовалют?',
   },
   {
     id: '2',
     role: 'assistant',
-    text: 'There have been significant price fluctuations in cryptocurrencies recently.',
+    text: 'Недавно произошли значительные колебания цен на криптовалюты.',
   },
   {
     id: '3',
     role: 'user',
-    text: 'Which cryptocurrency is currently performing the best?',
+    text: 'Какая криптовалюта в настоящее время показывает лучшие результаты?',
   },
   {
     id: '4',
     role: 'assistant',
-    text: 'Bitcoin (BTC) has been leading the market in terms of both price and market capitalization.',
+    text: 'Биткойн (BTC) лидирует на рынке как по цене, так и по капитализации.',
   },
   {
     id: '5',
     role: 'user',
-    text: 'Are there any upcoming regulatory changes affecting cryptocurrencies?',
+    text: 'Есть ли предстоящие регуляторные изменения, затрагивающие криптовалюты?',
   },
   {
     id: '6',
     role: 'assistant',
-    text: 'Several countries are considering or implementing regulations to address the growing popularity of cryptocurrencies.',
+    text: 'Несколько стран рассматривают или уже внедрили регулятивные меры в связи с растущей популярностью криптовалют.',
   },
   {
     id: '7',
     role: 'user',
-    text: 'What are the risks associated with investing in cryptocurrencies?',
+    text: 'Какие риски связаны с инвестициями в криптовалюты?',
   },
   {
     id: '8',
     role: 'assistant',
-    text: 'Cryptocurrency investments carry risks such as volatility, security vulnerabilities, and regulatory uncertainties.',
+    text: 'Инвестиции в криптовалюты несут риски, такие как волатильность, уязвимости безопасности и правовая неопределенность.',
   },
   {
     id: '9',
     role: 'user',
-    text: 'Can you recommend a reliable cryptocurrency exchange?',
+    text: 'Можете ли вы порекомендовать надежную криптовалютную биржу?',
   },
   {
     id: '10',
     role: 'assistant',
-    text: 'Binance and Coinbase are popular and trusted cryptocurrency exchanges.',
+    text: 'Binance и Coinbase являются популярными и надежными криптовалютными биржами.',
   },
 ];
-
 export const MOCK_DATA_FIFTEEN = [
   {
     id: '1',

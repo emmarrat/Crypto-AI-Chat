@@ -30,7 +30,6 @@
     scrollbar-color: transparent transparent;
     overflow: auto;
     overflow-x: hidden;
-    /*margin-top: 78px;*/
 }
 
 .chat__msg-wrapp::-webkit-scrollbar {

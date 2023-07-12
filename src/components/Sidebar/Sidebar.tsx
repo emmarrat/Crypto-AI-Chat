@@ -142,7 +142,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                 color="warning"
                 onClick={onNewChatClick}
               >
-                Start new chat
+                Начать новый чат
               </Button>
             </div>
             <Button
@@ -165,7 +165,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
           <div className="sidebar__header">
             <h4 className="history-title">
               <HistoryRoundedIcon sx={{ mr: 1 }} />
-              History
+              История
             </h4>
           </div>
         </DrawerHeader>
