@@ -160,7 +160,9 @@ const Chat = () => {
                   <IconButton
                     type="submit"
                     disabled={
-                      messageText.length === 0 || totalMessages === LIMIT_MESSAGES
+                      messageText.length === 0 ||
+                      totalMessages === LIMIT_MESSAGES ||
+                      isLoading
                     }
                     sx={{ p: '10px', color: 'secondary.dark' }}
                     aria-label="send message"

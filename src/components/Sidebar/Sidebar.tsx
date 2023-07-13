@@ -110,8 +110,6 @@ const Sidebar: React.FC<Props> = ({ children }) => {
     dispatch(startNewChat());
   };
 
-  let header = <></>;
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
