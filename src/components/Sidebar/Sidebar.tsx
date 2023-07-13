@@ -23,8 +23,10 @@ import { HistoryChats } from '../../types';
 import {
   selectChatFromHistory,
   selectHistory,
+  selectTotalMessages,
   startNewChat,
 } from '../../features/Chat/chatsSlice';
+import { LIMIT_MESSAGES } from '../../constants';
 
 const drawerWidth = 260;
 
@@ -83,6 +85,8 @@ interface Props {
 const Sidebar: React.FC<Props> = ({ children }) => {
   const dispatch = useAppDispatch();
   const historyList = useAppSelector(selectHistory);
+  const totalMessages = useAppSelector(selectTotalMessages);
+
   const [open, setOpen] = React.useState(true);
   const [showMenuButton, setShowMenuButton] = React.useState(false); // New state
 
@@ -106,17 +110,14 @@ const Sidebar: React.FC<Props> = ({ children }) => {
     dispatch(startNewChat());
   };
 
+  let header = <></>;
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <div
-        style={{
-          position: 'fixed',
-          display: showMenuButton ? 'block' : 'none',
-          top: '20px',
-          left: '40px',
-          zIndex: 9999,
-        }}
+        className="sidebar__header-wrapp"
+        style={{ display: showMenuButton ? 'block' : 'none' }}
       >
         <IconButton
           color="inherit"
@@ -140,9 +141,18 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                 className="sidebar__btn"
                 variant="contained"
                 color="warning"
-                onClick={onNewChatClick}
+                onClick={
+                  totalMessages === LIMIT_MESSAGES
+                    ? onNewChatClick
+                    : () => alert('логика оформления подписки')
+                }
+                sx={{
+                  padding: '6px 8px',
+                }}
               >
-                Начать новый чат
+                {totalMessages === LIMIT_MESSAGES
+                  ? 'Оформить подписку'
+                  : 'Начать новый чат'}
               </Button>
             </div>
             <Button
@@ -154,41 +164,42 @@ const Sidebar: React.FC<Props> = ({ children }) => {
               <ChevronLeftIcon className="sidebar__btn" sx={{ color: '#ffff' }} />
             </Button>
           </div>
-          <div
-            style={{
-              backgroundColor: '#fff',
-              margin: '10px 0',
-              height: '0.5px',
-              width: '100%',
-            }}
-          />
-          <div className="sidebar__header">
-            <h4 className="history-title">
-              <HistoryRoundedIcon sx={{ mr: 1 }} />
-              История
-            </h4>
-          </div>
+          <div className="sidebar__divider" />
+          {totalMessages !== LIMIT_MESSAGES && (
+            <div className="sidebar__header">
+              <h4 className="history-title">
+                <HistoryRoundedIcon sx={{ mr: 1 }} />
+                История
+              </h4>
+            </div>
+          )}
         </DrawerHeader>
-        <List>
-          {historyList.map((chat) => (
-            <ListItem key={chat.id} disablePadding sx={{ display: 'block', padding: 0 }}>
-              <Tooltip title={chat.title} placement="right">
-                <ListItemButton
-                  sx={{
-                    minHeight: 50,
-                    justifyContent: 'start',
-                    padding: '0 20px',
-                  }}
-                  className="sidebar__btn"
-                  onClick={() => onChatClick(chat)}
-                >
-                  <ChatBubbleOutlineRoundedIcon sx={{ mr: 1 }} fontSize="small" />
-                  <p className="history-item">{chat.title}</p>
-                </ListItemButton>
-              </Tooltip>
-            </ListItem>
-          ))}
-        </List>
+        {totalMessages !== LIMIT_MESSAGES && (
+          <List>
+            {historyList.map((chat) => (
+              <ListItem
+                key={chat.id}
+                disablePadding
+                sx={{ display: 'block', padding: 0 }}
+              >
+                <Tooltip title={chat.title} placement="right">
+                  <ListItemButton
+                    sx={{
+                      minHeight: 50,
+                      justifyContent: 'start',
+                      padding: '0 20px',
+                    }}
+                    className="sidebar__btn"
+                    onClick={() => onChatClick(chat)}
+                  >
+                    <ChatBubbleOutlineRoundedIcon sx={{ mr: 1 }} fontSize="small" />
+                    <p className="history-item">{chat.title}</p>
+                  </ListItemButton>
+                </Tooltip>
+              </ListItem>
+            ))}
+          </List>
+        )}
       </Drawer>
       <Box
         component="main"
