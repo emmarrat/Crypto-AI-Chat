@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { Button, Divider, IconButton, InputBase, Paper } from '@mui/material';
+import { Button, Divider, IconButton, InputBase, Paper, Tooltip } from '@mui/material';
 import './Chat.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
@@ -105,8 +105,6 @@ const Chat = () => {
     return null;
   };
 
-  console.log(totalMessages);
-
   return (
     <>
       <Sidebar>
@@ -179,14 +177,17 @@ const Chat = () => {
         <div className="chat__modal-wrapp">
           <h4 className="chat__modal-title">Вам понравился наш чат бот?</h4>
           <p className="chat__modal-text">
-            Оформите ежемесячную подписку всего за <b>99.99 dogecoin-ов</b> в месяц и вы
-            получите <b>неограниченное количество запросов</b>{' '}
+            Авторизируйтесь и оформите ежемесячную подписку всего за{' '}
+            <b>99.99 dogecoin-ов</b> в месяц и вы получите{' '}
+            <b>неограниченное количество запросов</b>{' '}
             <BoltIcon sx={{ color: COLORS.lightGreen, verticalAlign: 'bottom' }} />
           </p>
           <Divider sx={{ my: 3 }} />
-          <Button variant="contained" color="secondary" sx={{ fontWeight: 'bold' }}>
-            Оформить подписку
-          </Button>
+          <Tooltip title="*После нажатия будет логика Авторизации, после чего можно будет оформить подписку">
+            <Button variant="contained" color="secondary" sx={{ fontWeight: 'bold' }}>
+              Оформить подписку
+            </Button>
+          </Tooltip>
         </div>
       </ChatModal>
     </>

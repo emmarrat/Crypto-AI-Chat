@@ -1,7 +1,7 @@
-import { HistoryChats, Chat, Message } from '../../types';
+import { Chat, HistoryChats, Message } from '../../types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { CHATS, HISTORY_CHATS, LIMIT_MESSAGES } from '../../constants';
+import { CHATS, LIMIT_MESSAGES } from '../../constants';
 import generateId from '../../generateId';
 import { sendMessage } from './chatThunks';
 
