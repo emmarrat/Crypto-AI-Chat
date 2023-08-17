@@ -10,6 +10,16 @@
     .chat__container {
         margin-top: 78px;
     }
+    .chat__empty-msg, .chat__empty,  .chat__modal-text {
+        font-size: 12px;
+    }
+    .chat__modal-title, .chat__modal-inner-title {
+        font-size: 14px;
+    }
+    .MuiDialog-container {
+        width: 80% !important;
+        margin: auto !important;
+    }
 }
 
 @media screen and (max-width: 576px) {

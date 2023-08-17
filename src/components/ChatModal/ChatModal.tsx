@@ -19,7 +19,9 @@ const ChatModal: React.FC<Props> = ({ open, handleClose, title, children }) => {
       transitionDuration={{ exit: 0.2 }}
     >
       <DialogTitle>
-        <strong style={{ margin: 0 }}>{title}</strong>
+        <strong className="chat__modal-inner-title" style={{ margin: 0 }}>
+          {title}
+        </strong>
         <IconButton
           aria-label="close"
           onClick={handleClose}
