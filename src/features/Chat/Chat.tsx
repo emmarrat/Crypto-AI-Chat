@@ -32,7 +32,7 @@ const Chat = () => {
     if (totalMessages === LIMIT_MESSAGES) {
       setIsModalOpen(true);
     }
-  }, [existingChat, totalMessages]);
+  }, [existingChat, totalMessages, isLoading]);
 
   const submitMessage = async (e: React.FormEvent) => {
     e.preventDefault();
