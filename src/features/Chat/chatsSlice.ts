@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { CHATS, HISTORY_CHATS, LIMIT_MESSAGES } from '../../constants';
 import generateId from '../../generateId';
+import { sendMessage } from './chatThunks';
 
 interface ChatState {
   chatsHistory: HistoryChats[];
@@ -15,7 +16,7 @@ interface ChatState {
 }
 
 const initialState: ChatState = {
-  chatsHistory: HISTORY_CHATS,
+  chatsHistory: [],
   selectedChat: null,
   chat: [],
   allChats: CHATS,
@@ -64,7 +65,7 @@ export const chatsSlice = createSlice({
         state.chat = newChat.chat;
         state.selectedChat = newChat;
       }
-      if (message.role === 'user' && state.totalMessages <= LIMIT_MESSAGES) {
+      if (message.role === 'user' && state.totalMessages < LIMIT_MESSAGES) {
         state.totalMessages += 1;
       }
     },
@@ -83,7 +84,32 @@ export const chatsSlice = createSlice({
       state.selectedChat = newChat;
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder.addCase(sendMessage.pending, (state) => {
+      state.sending = true;
+    });
+    builder.addCase(sendMessage.fulfilled, (state, { payload: botResponse }) => {
+      const botMessage = {
+        role: 'assistant',
+        text: botResponse,
+        id: generateId(),
+      };
+      state.sending = false;
+      if (state.totalMessages < LIMIT_MESSAGES) {
+        state.totalMessages += 1;
+        state.chat.push(botMessage);
+        const selectedChatIndex = state.allChats.findIndex(
+          (chat) => chat.id === state.selectedChat?.id,
+        );
+        if (selectedChatIndex !== -1) {
+          state.allChats[selectedChatIndex].chat.push(botMessage);
+        }
+      }
+    });
+    builder.addCase(sendMessage.rejected, (state) => {
+      state.sending = false;
+    });
+  },
 });
 
 export const chatsReducer = chatsSlice.reducer;

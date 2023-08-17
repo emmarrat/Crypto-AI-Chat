@@ -1,5 +1,5 @@
 import { Chat, HistoryChats } from './types';
-export const apiURL = 'HERE GONNA BE SOME REAL URL';
+export const apiURL = 'https://cryptoflexx.fly.dev';
 
 export const LIMIT_MESSAGES = 5; // УСЛОВНОЕ ЗНАЧЕНИЕ
 

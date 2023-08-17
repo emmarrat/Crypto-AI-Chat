@@ -3,7 +3,12 @@ import Sidebar from '../../components/Sidebar/Sidebar';
 import { Button, Divider, IconButton, InputBase, Paper } from '@mui/material';
 import './Chat.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addNewMessage, selectChat, selectTotalMessages } from './chatsSlice';
+import {
+  addNewMessage,
+  selectChat,
+  selectSendingMsg,
+  selectTotalMessages,
+} from './chatsSlice';
 import SmartToyRoundedIcon from '@mui/icons-material/SmartToyRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import SendIcon from '@mui/icons-material/Send';
@@ -11,14 +16,14 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import { COLORS, LIMIT_MESSAGES } from '../../constants';
 import generateId from '../../generateId';
 import ChatModal from '../../components/ChatModal/ChatModal';
+import { sendMessage } from './chatThunks';
 
 const Chat = () => {
   const dispatch = useAppDispatch();
   const existingChat = useAppSelector(selectChat);
   const totalMessages = useAppSelector(selectTotalMessages);
-
+  const isLoading = useAppSelector(selectSendingMsg);
   const [messageText, setMessageText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -29,23 +34,12 @@ const Chat = () => {
     }
   }, [existingChat, totalMessages]);
 
-  const sendMessage = (e: React.FormEvent) => {
+  const submitMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     const userMessage = { role: 'user', text: messageText, id: generateId() };
-
-    const botMessage = {
-      // Данная конструкция создана только для демонстрации пока нет бека
-      role: 'assistant',
-      text: 'i do not have access to the server, sorry :(',
-      id: generateId(),
-    };
-    dispatch(addNewMessage(userMessage));
+    await dispatch(addNewMessage(userMessage));
     setMessageText('');
-    setIsLoading(true); // Данная конструкция создана только для демонстрации пока нет бека
-    setTimeout(() => {
-      setIsLoading(false);
-      dispatch(addNewMessage(botMessage)); // Данная конструкция создана только для демонстрации пока нет бека
-    }, 2000);
+    await dispatch(sendMessage({ query: userMessage.text })).unwrap;
   };
 
   const scrollToBottom = () => {
@@ -111,6 +105,8 @@ const Chat = () => {
     return null;
   };
 
+  console.log(totalMessages);
+
   return (
     <>
       <Sidebar>
@@ -135,7 +131,7 @@ const Chat = () => {
             <div className="chat__block chat__form-wrapp chat__item">
               <Paper
                 component="form"
-                onSubmit={sendMessage}
+                onSubmit={submitMessage}
                 className="chat__form"
                 sx={{
                   border: 'none',
@@ -181,7 +177,7 @@ const Chat = () => {
         title="Превышен лимит запросов"
       >
         <div className="chat__modal-wrapp">
-          <h3 className="chat__modal-title">Вам понравился наш чат бот?</h3>
+          <h4 className="chat__modal-title">Вам понравился наш чат бот?</h4>
           <p className="chat__modal-text">
             Оформите ежемесячную подписку всего за <b>99.99 dogecoin-ов</b> в месяц и вы
             получите <b>неограниченное количество запросов</b>{' '}

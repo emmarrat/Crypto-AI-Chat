@@ -13,3 +13,7 @@ export interface Message {
   text: string;
   role: string;
 }
+
+interface RequestBody {
+  query: string;
+}
