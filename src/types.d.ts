@@ -17,3 +17,8 @@ export interface Message {
 interface RequestBody {
   query: string;
 }
+
+interface AiResponse {
+  id: string;
+  answer: string;
+}

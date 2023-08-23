@@ -10,3 +10,18 @@ export const COLORS = {
   white: '#fff',
 };
 export const CHATS: Chat[] = [];
+
+export const extractValues = function (inputString: string) {
+  const startIndex = inputString.indexOf("'answer': '") + "'answer': '".length;
+  const endIndex = inputString.indexOf("',", startIndex);
+  const answer = inputString.substring(startIndex, endIndex);
+
+  const idStartIndex = inputString.indexOf("'id': '") + "'id': '".length;
+  const idEndIndex = inputString.indexOf("'", idStartIndex);
+  const id = inputString.substring(idStartIndex, idEndIndex);
+
+  return {
+    answer: answer,
+    id: id,
+  };
+};

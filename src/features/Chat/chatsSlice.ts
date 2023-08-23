@@ -1,7 +1,7 @@
-import { Chat, HistoryChats, Message } from '../../types';
+import { AiResponse, Chat, HistoryChats, Message } from '../../types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { CHATS, LIMIT_MESSAGES } from '../../constants';
+import { CHATS, extractValues, LIMIT_MESSAGES } from '../../constants';
 import generateId from '../../generateId';
 import { sendMessage } from './chatThunks';
 
@@ -89,10 +89,11 @@ export const chatsSlice = createSlice({
       state.sending = true;
     });
     builder.addCase(sendMessage.fulfilled, (state, { payload: botResponse }) => {
+      const data: AiResponse = extractValues(botResponse);
       const botMessage = {
         role: 'assistant',
-        text: botResponse,
-        id: generateId(),
+        text: data.answer,
+        id: data.id,
       };
       state.sending = false;
       if (state.totalMessages < LIMIT_MESSAGES) {
