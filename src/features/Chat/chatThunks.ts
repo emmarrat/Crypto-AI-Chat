@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { RequestBody } from '../../types';
+import { ChatRequestBody, ChatResponse } from '../../types';
 import axiosApi from '../../axiosApi';
 
-export const sendMessage = createAsyncThunk<string, RequestBody>(
+export const sendMessage = createAsyncThunk<ChatResponse, ChatRequestBody>(
   'chat/fetchData',
   async (body) => {
     try {

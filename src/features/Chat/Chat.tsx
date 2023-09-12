@@ -8,6 +8,7 @@ import {
   selectChat,
   selectSendingMsg,
   selectTotalMessages,
+  selectUser,
 } from './chatsSlice';
 import SmartToyRoundedIcon from '@mui/icons-material/SmartToyRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
@@ -17,12 +18,14 @@ import { COLORS, LIMIT_MESSAGES } from '../../constants';
 import generateId from '../../generateId';
 import ChatModal from '../../components/ChatModal/ChatModal';
 import { sendMessage } from './chatThunks';
+import { ChatRequestBody } from '../../types';
 
 const Chat = () => {
   const dispatch = useAppDispatch();
   const existingChat = useAppSelector(selectChat);
   const totalMessages = useAppSelector(selectTotalMessages);
   const isLoading = useAppSelector(selectSendingMsg);
+  const user = useAppSelector(selectUser);
   const [messageText, setMessageText] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,10 +39,16 @@ const Chat = () => {
 
   const submitMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
     const userMessage = { role: 'user', text: messageText, id: generateId() };
+    const sendingMessage: ChatRequestBody = {
+      id: user.id,
+      prompt: messageText,
+      conversation_id: null,
+    };
     await dispatch(addNewMessage(userMessage));
     setMessageText('');
-    await dispatch(sendMessage({ query: userMessage.text })).unwrap;
+    await dispatch(sendMessage(sendingMessage)).unwrap;
   };
 
   const scrollToBottom = () => {
@@ -52,8 +61,6 @@ const Chat = () => {
     if (existingChat.length === 0) {
       return (
         <h3 className="chat__msg chat__empty-msg">
-          Не авторизированные пользователи получают доступ к отправке 10 сообщений <br />
-          <br />
           Пожалуйста, отправьте сообщение для начала диалога...
         </h3>
       );

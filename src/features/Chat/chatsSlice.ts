@@ -1,18 +1,21 @@
-import { AiResponse, Chat, HistoryChats, Message } from '../../types';
+import { Chat, ConversationData, Message, User } from '../../types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { CHATS, extractValues, LIMIT_MESSAGES } from '../../constants';
+import { CHATS, LIMIT_MESSAGES } from '../../constants';
 import generateId from '../../generateId';
 import { sendMessage } from './chatThunks';
+import { login, register } from '../User/usersThunks';
 
 interface ChatState {
-  chatsHistory: HistoryChats[];
+  chatsHistory: ConversationData[];
   selectedChat: Chat | null;
   chat: Message[];
   allChats: Chat[];
   fetching: boolean;
   sending: boolean;
   totalMessages: number;
+  user: User | null;
+  authorizationLoading: boolean;
 }
 
 const initialState: ChatState = {
@@ -23,65 +26,20 @@ const initialState: ChatState = {
   fetching: false,
   sending: false,
   totalMessages: 0,
+  user: null,
+  authorizationLoading: false,
 };
 
 export const chatsSlice = createSlice({
   name: 'chats',
   initialState,
   reducers: {
-    selectChatFromHistory: (state, { payload: chat }: PayloadAction<HistoryChats>) => {
-      const existingIndex = state.chatsHistory.find((item) => {
-        return item.id === chat.id;
-      });
-      if (existingIndex) {
-        const existingChat = state.allChats.find((chat) => {
-          return chat.id === existingIndex.chatId;
-        });
-        state.chat = existingChat?.chat || [];
-        state.selectedChat = existingChat || null;
-      }
-    },
     addNewMessage: (state, { payload: message }: PayloadAction<Message>) => {
-      if (state.chat.length > 0) {
-        state.chat.push(message);
-        const selectedChatIndex = state.allChats.findIndex(
-          (chat) => chat.id === state.selectedChat?.id,
-        );
-        if (selectedChatIndex !== -1) {
-          state.allChats[selectedChatIndex].chat.push(message);
-        }
-      } else {
-        const newHistoryChat: HistoryChats = {
-          id: generateId(),
-          title: message.text.slice(0, 20),
-          chatId: generateId(),
-        };
-        const newChat: Chat = {
-          id: newHistoryChat.chatId,
-          chat: [message],
-        };
-        state.chatsHistory = [...state.chatsHistory, newHistoryChat];
-        state.allChats = [...state.allChats, newChat];
-        state.chat = newChat.chat;
-        state.selectedChat = newChat;
-      }
-      if (message.role === 'user' && state.totalMessages < LIMIT_MESSAGES) {
-        state.totalMessages += 1;
-      }
+      state.chat.push(message);
     },
-
-    startNewChat: (state) => {
-      const newHistoryChat: HistoryChats = {
-        id: generateId(),
-        title: '',
-        chatId: generateId(),
-      };
-      const newChat: Chat = {
-        id: newHistoryChat.chatId,
-        chat: [],
-      };
-      state.chat = newChat.chat;
-      state.selectedChat = newChat;
+    unsetUser: (state) => {
+      state.user = null;
+      state.chatsHistory = [];
     },
   },
   extraReducers: (builder) => {
@@ -89,13 +47,13 @@ export const chatsSlice = createSlice({
       state.sending = true;
     });
     builder.addCase(sendMessage.fulfilled, (state, { payload: botResponse }) => {
-      const data: AiResponse = extractValues(botResponse);
       const botMessage = {
         role: 'assistant',
-        text: data.answer,
-        id: data.id,
+        text: botResponse.reply,
+        id: generateId(),
       };
       state.sending = false;
+
       if (state.totalMessages < LIMIT_MESSAGES) {
         state.totalMessages += 1;
         state.chat.push(botMessage);
@@ -110,14 +68,48 @@ export const chatsSlice = createSlice({
     builder.addCase(sendMessage.rejected, (state) => {
       state.sending = false;
     });
+    builder.addCase(register.pending, (state) => {
+      state.authorizationLoading = true;
+    });
+    builder.addCase(register.fulfilled, (state, { payload: user }) => {
+      state.authorizationLoading = false;
+      state.user = {
+        id: user.id,
+        email: user.email,
+        paid: user.paid,
+        bill_date: user.bill_date,
+      };
+      state.chatsHistory = user.conversations;
+    });
+    builder.addCase(register.rejected, (state, { payload: error }) => {
+      state.authorizationLoading = false;
+    });
+    builder.addCase(login.pending, (state) => {
+      state.authorizationLoading = true;
+    });
+    builder.addCase(login.fulfilled, (state, { payload: user }) => {
+      state.authorizationLoading = false;
+      state.user = {
+        id: user.id,
+        email: user.email,
+        paid: user.paid,
+        bill_date: user.bill_date,
+      };
+      state.chatsHistory = user.conversations;
+    });
+    builder.addCase(login.rejected, (state, { payload: error }) => {
+      state.authorizationLoading = false;
+    });
   },
 });
 
 export const chatsReducer = chatsSlice.reducer;
-export const { selectChatFromHistory, addNewMessage, startNewChat } = chatsSlice.actions;
+export const { addNewMessage, unsetUser } = chatsSlice.actions;
 
 export const selectHistory = (state: RootState) => state.chats.chatsHistory;
 export const selectChat = (state: RootState) => state.chats.chat;
 export const selectFetchingChats = (state: RootState) => state.chats.fetching;
 export const selectSendingMsg = (state: RootState) => state.chats.sending;
 export const selectTotalMessages = (state: RootState) => state.chats.totalMessages;
+export const selectUser = (state: RootState) => state.chats.user;
+export const selectAuthLoading = (state: RootState) => state.chats.authorizationLoading;

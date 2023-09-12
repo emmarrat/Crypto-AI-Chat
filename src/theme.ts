@@ -33,8 +33,13 @@ const theme: Theme = createTheme({
     },
     MuiTextField: {
       defaultProps: {
-        variant: 'outlined',
+        variant: 'filled',
         fullWidth: true,
+      },
+    },
+    MuiTypography: {
+      defaultProps: {
+        color: '#fff',
       },
     },
   },
