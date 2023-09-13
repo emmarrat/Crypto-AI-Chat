@@ -1,11 +1,6 @@
 export interface Chat {
   id: string;
-  chat: Message[];
-}
-export interface Message {
-  id: string;
-  text: string;
-  role: string;
+  chat: MessageFull[];
 }
 
 export interface RequestBody {
@@ -26,6 +21,10 @@ export interface ConversationData {
   conversation_id: string;
   conversation_name: string;
 }
+export interface ConversationFull {
+  conversation_id: string;
+  conversation: MessageFull[];
+}
 
 export interface UserAuthResponse {
   id: string;
@@ -40,9 +39,13 @@ export interface User {
   paid: boolean;
   bill_date: string;
 }
-export interface Conversation {
+export interface Message {
   role: string;
   content: string;
+}
+
+export interface MessageFull extends Message {
+  id: string;
 }
 
 export interface ChatRequestBody {
@@ -55,4 +58,19 @@ export interface ChatResponse {
   id: string;
   reply: string;
   conversation_id: string;
+}
+
+export interface ConversationId {
+  id: string;
+  conversation_id: string;
+}
+
+export interface ChatFullData extends ConversationId {
+  conversation_name: string;
+  conversation: Message[];
+}
+
+export interface ChatFull extends ConversationId {
+  conversation_name: string;
+  conversation: MessageFull[];
 }

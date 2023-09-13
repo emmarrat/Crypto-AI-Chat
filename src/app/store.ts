@@ -15,7 +15,7 @@ import { chatsReducer } from '../features/Chat/chatsSlice';
 const usersPersistConfig = {
   key: 'crypto-chat:users',
   storage,
-  whitelist: ['user', 'chatsHistory'],
+  whitelist: ['user', 'chatsHistory', 'selectedChat'],
 };
 
 const rootReducer = combineReducers({

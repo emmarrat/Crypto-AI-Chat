@@ -90,7 +90,7 @@ const Login = () => {
                 label="Email"
                 name="email"
                 type="email"
-                autoComplete="new-email"
+                autoComplete="off"
                 value={state.email}
                 onChange={inputChangeHandler}
                 sx={{ width: '100%', color: '#000' }}

@@ -14,7 +14,7 @@ import SmartToyRoundedIcon from '@mui/icons-material/SmartToyRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import SendIcon from '@mui/icons-material/Send';
 import BoltIcon from '@mui/icons-material/Bolt';
-import { COLORS, LIMIT_MESSAGES } from '../../constants';
+import { COLORS, LIMIT_MESSAGES } from '../../utils/constants';
 import generateId from '../../generateId';
 import ChatModal from '../../components/ChatModal/ChatModal';
 import { sendMessage } from './chatThunks';
@@ -40,13 +40,12 @@ const Chat = () => {
   const submitMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
-    const userMessage = { role: 'user', text: messageText, id: generateId() };
     const sendingMessage: ChatRequestBody = {
       id: user.id,
       prompt: messageText,
-      conversation_id: null,
+      conversation_id: existingChat.conversation_id ? existingChat.conversation_id : null,
     };
-    await dispatch(addNewMessage(userMessage));
+    await dispatch(addNewMessage(messageText));
     setMessageText('');
     await dispatch(sendMessage(sendingMessage)).unwrap;
   };
@@ -58,14 +57,14 @@ const Chat = () => {
   };
 
   const renderMessages = () => {
-    if (existingChat.length === 0) {
+    if (existingChat.conversation.length === 0) {
       return (
         <h3 className="chat__msg chat__empty-msg">
           Пожалуйста, отправьте сообщение для начала диалога...
         </h3>
       );
     }
-    return existingChat.map((message) => (
+    return existingChat.conversation.map((message) => (
       <div key={message.id} className={`chat__msg chat__msg-${message.role}`}>
         <div className="chat__item">
           <div className="chat__item-inner">
@@ -76,7 +75,7 @@ const Chat = () => {
                 <SmartToyRoundedIcon sx={{ color: COLORS.lightGreen }} />
               )}
             </div>
-            <p className="chat__text"> {message.text}</p>
+            <p className="chat__text"> {message.content}</p>
           </div>
         </div>
       </div>
@@ -128,7 +127,7 @@ const Chat = () => {
           <div className="chat__container">
             <div
               className={`chat__block chat__msg-wrapp ${
-                existingChat.length > 0 ? 'chat__started' : 'chat__empty'
+                existingChat.conversation.length > 0 ? 'chat__started' : 'chat__empty'
               }`}
               ref={containerRef}
             >

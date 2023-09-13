@@ -1,11 +1,10 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import './Sidebar.css';
 import {
   Box,
   Button,
   CssBaseline,
   CSSObject,
-  Divider,
   IconButton,
   List,
   ListItem,
@@ -20,15 +19,18 @@ import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineR
 import { Theme } from '@mui/material/styles';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { ConversationData } from '../../types';
 import {
+  selectChat,
+  selectFetchingChats,
   selectHistory,
   selectTotalMessages,
+  selectUser,
+  startNewChat,
   unsetUser,
 } from '../../features/Chat/chatsSlice';
-import { COLORS, LIMIT_MESSAGES } from '../../constants';
-import ChatModal from '../ChatModal/ChatModal';
-import BoltIcon from '@mui/icons-material/Bolt';
+import { COLORS, LIMIT_MESSAGES } from '../../utils/constants';
+import { getChatById } from '../../features/Chat/chatThunks';
+import SimpleBackdrop from '../SimpleBackdrop/SimpleBackdrop';
 
 const drawerWidth = 260;
 
@@ -88,34 +90,39 @@ const Sidebar: React.FC<Props> = ({ children }) => {
   const dispatch = useAppDispatch();
   const historyList = useAppSelector(selectHistory);
   const totalMessages = useAppSelector(selectTotalMessages);
-
-  const [open, setOpen] = React.useState(true);
+  const user = useAppSelector(selectUser);
+  const selectedChat = useAppSelector(selectChat);
+  const chatLoading = useAppSelector(selectFetchingChats);
+  const [openDrawer, setOpenDrawer] = React.useState(true);
   const [showMenuButton, setShowMenuButton] = React.useState(false); // New state
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDrawerOpen = () => {
-    setOpen(true);
+    setOpenDrawer(true);
     setShowMenuButton(false);
   };
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    setOpenDrawer(false);
     setTimeout(() => {
       setShowMenuButton(true);
     }, 300);
   };
 
-  const onChatClick = (chat: ConversationData) => {
-    //ВЫБОР ЧАТА ИЗ ИСТОРИИ
+  const onChatClick = (chat_id: string) => {
+    if (!user) return;
+
+    dispatch(
+      getChatById({
+        id: user.id,
+        conversation_id: chat_id,
+      }),
+    );
   };
 
   const onNewChatClick = () => {
-    // НАЧАТЬ НОВЫЙ ЧАТ
+    dispatch(startNewChat());
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
   const logout = () => {
     dispatch(unsetUser());
   };
@@ -136,13 +143,13 @@ const Sidebar: React.FC<Props> = ({ children }) => {
             sx={{
               backgroundColor: '#171717',
               marginRight: 5,
-              ...(open && { display: 'none' }),
+              ...(openDrawer && { display: 'none' }),
             }}
           >
             <MenuIcon color="info" />
           </IconButton>
         </div>
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" open={openDrawer}>
           <div
             style={{
               display: 'flex',
@@ -160,18 +167,12 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                       className="sidebar__btn"
                       variant="contained"
                       color="warning"
-                      onClick={
-                        totalMessages === LIMIT_MESSAGES
-                          ? onNewChatClick
-                          : () => setIsModalOpen(true)
-                      }
+                      onClick={onNewChatClick}
                       sx={{
                         padding: '6px 8px',
                       }}
                     >
-                      {totalMessages === LIMIT_MESSAGES
-                        ? 'Оформить подписку'
-                        : 'Начать новый чат'}
+                      Начать новый чат
                     </Button>
                   </div>
                   <Button
@@ -199,7 +200,14 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                     <ListItem
                       key={chat.conversation_id}
                       disablePadding
-                      sx={{ display: 'block', padding: 0 }}
+                      sx={{
+                        display: 'block',
+                        padding: 0,
+                        backgroundColor:
+                          chat.conversation_id === selectedChat.conversation_id
+                            ? COLORS.lightGreen
+                            : '',
+                      }}
                     >
                       <Tooltip title={chat.conversation_name} placement="right">
                         <ListItemButton
@@ -209,10 +217,29 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                             padding: '0 20px',
                           }}
                           className="sidebar__btn"
-                          onClick={() => onChatClick(chat)}
+                          onClick={() => onChatClick(chat.conversation_id)}
                         >
-                          <ChatBubbleOutlineRoundedIcon sx={{ mr: 1 }} fontSize="small" />
-                          <p className="history-item">{chat.conversation_name}</p>
+                          <ChatBubbleOutlineRoundedIcon
+                            sx={{
+                              mr: 1,
+                              color:
+                                chat.conversation_id === selectedChat.conversation_id
+                                  ? COLORS.darkBlue
+                                  : '',
+                            }}
+                            fontSize="small"
+                          />
+                          <p
+                            className="history-item"
+                            style={{
+                              color:
+                                chat.conversation_id === selectedChat.conversation_id
+                                  ? COLORS.darkBlue
+                                  : '',
+                            }}
+                          >
+                            {chat.conversation_name}
+                          </p>
                         </ListItemButton>
                       </Tooltip>
                     </ListItem>
@@ -240,27 +267,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
           {children}
         </Box>
       </Box>
-      <ChatModal
-        open={isModalOpen}
-        handleClose={closeModal}
-        title="Новый чат доступен после авторизации"
-      >
-        <div className="chat__modal-wrapp">
-          <h4 className="chat__modal-title">Вам понравился наш чат бот?</h4>
-          <p className="chat__modal-text">
-            Авторизируйтесь и оформите ежемесячную подписку всего за{' '}
-            <b>99.99 dogecoin-ов</b> в месяц и вы получите{' '}
-            <b>неограниченное количество запросов</b>{' '}
-            <BoltIcon sx={{ color: COLORS.lightGreen, verticalAlign: 'bottom' }} />
-          </p>
-          <Divider sx={{ my: 3 }} />
-          <Tooltip title="*После нажатия будет логика Авторизации, после чего можно будет оформить подписку">
-            <Button variant="contained" color="secondary" sx={{ fontWeight: 'bold' }}>
-              Войти
-            </Button>
-          </Tooltip>
-        </div>
-      </ChatModal>
+      <SimpleBackdrop open={chatLoading} />
     </>
   );
 };
