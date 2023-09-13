@@ -15,7 +15,6 @@ import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import SendIcon from '@mui/icons-material/Send';
 import BoltIcon from '@mui/icons-material/Bolt';
 import { COLORS, LIMIT_MESSAGES } from '../../utils/constants';
-import generateId from '../../generateId';
 import ChatModal from '../../components/ChatModal/ChatModal';
 import { sendMessage } from './chatThunks';
 import { ChatRequestBody } from '../../types';

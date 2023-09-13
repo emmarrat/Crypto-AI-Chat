@@ -81,7 +81,7 @@ export const chatsSlice = createSlice({
       };
       state.chatsHistory = user.conversations;
     });
-    builder.addCase(register.rejected, (state, { payload: error }) => {
+    builder.addCase(register.rejected, (state) => {
       state.authorizationLoading = false;
     });
     builder.addCase(login.pending, (state) => {
@@ -97,7 +97,7 @@ export const chatsSlice = createSlice({
       };
       state.chatsHistory = user.conversations;
     });
-    builder.addCase(login.rejected, (state, { payload: error }) => {
+    builder.addCase(login.rejected, (state) => {
       state.authorizationLoading = false;
     });
     builder.addCase(getChatById.pending, (state) => {
@@ -111,7 +111,7 @@ export const chatsSlice = createSlice({
         conversation,
       };
     });
-    builder.addCase(getChatById.rejected, (state, { payload: error }) => {
+    builder.addCase(getChatById.rejected, (state) => {
       state.fetching = false;
     });
   },

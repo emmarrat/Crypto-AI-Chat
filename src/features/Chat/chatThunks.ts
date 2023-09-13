@@ -4,8 +4,6 @@ import {
   ChatFullData,
   ChatRequestBody,
   ChatResponse,
-  ConversationData,
-  ConversationFull,
   ConversationId,
   MessageFull,
 } from '../../types';
