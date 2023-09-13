@@ -46,6 +46,10 @@ export const chatsSlice = createSlice({
     unsetUser: (state) => {
       state.user = null;
       state.chatsHistory = [];
+      state.selectedChat = {
+        conversation_id: '',
+        conversation: [],
+      };
     },
   },
   extraReducers: (builder) => {
