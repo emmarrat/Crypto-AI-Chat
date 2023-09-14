@@ -1,5 +1,3 @@
-import { Chat } from '../types';
-
 export const NAV_LINKS = {
   home: '/',
   register: '/register',
@@ -16,4 +14,8 @@ export const COLORS = {
   lightGreen: '#48FF9E',
   white: '#fff',
 };
-export const CHATS: Chat[] = [];
+
+export const MESSAGES = {
+  errorLogin: 'Неверная электронная почта и/или пароль',
+  errorRegister: 'Пользователь с такой электронной почтой уже существует',
+};

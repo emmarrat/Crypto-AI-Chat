@@ -74,3 +74,7 @@ export interface ChatFull extends ConversationId {
   conversation_name: string;
   conversation: MessageFull[];
 }
+
+export interface GlobalError {
+  detail: string;
+}

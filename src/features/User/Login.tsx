@@ -19,7 +19,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { AuthMutation } from '../../types';
 import { login } from './usersThunks';
-import { NAV_LINKS } from '../../utils/constants';
+import { MESSAGES, NAV_LINKS } from '../../utils/constants';
 import { selectAuthLoading } from '../Chat/chatsSlice';
 
 const TextField = styled(MuiTextField)(({ theme }) => ({
@@ -61,7 +61,7 @@ const Login = () => {
       })
       .catch((e) => {
         console.log(e);
-        setError('Произошла ошибка, попробуйте еще раз');
+        setError(MESSAGES.errorLogin);
       });
   };
 

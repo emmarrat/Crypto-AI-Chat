@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Container, CssBaseline, Typography } from '@mui/material';
+import { Box, Button, CssBaseline, Typography } from '@mui/material';
 import { Link as RouterLink, Route, Routes } from 'react-router-dom';
 import { NAV_LINKS } from './utils/constants';
 import Register from './features/User/Register';
@@ -16,14 +16,7 @@ function App() {
       <CssBaseline />
       <main>
         <Routes>
-          <Route
-            path={NAV_LINKS.register}
-            element={
-              <ProtectedRoute isAllowed={user === null} returnTo={NAV_LINKS.chat}>
-                <Register />
-              </ProtectedRoute>
-            }
-          />
+          <Route path={NAV_LINKS.register} element={<Register />} />
           <Route
             path={NAV_LINKS.login}
             element={
