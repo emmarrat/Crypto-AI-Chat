@@ -18,10 +18,11 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Link as RouterLink } from 'react-router-dom';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { AuthMutation } from '../../types';
 import { register } from './usersThunks';
 import { MESSAGES, NAV_LINKS } from '../../utils/constants';
 import { selectAuthLoading } from '../Chat/chatsSlice';
+import { useErrorHandler } from '../../hooks/useErrorHandler';
+import { useAuthHandler } from '../../hooks/useAuthHandler';
 
 const TextField = styled(MuiTextField)(({ theme }) => ({
   '& .MuiFilledInput-root': {
@@ -39,30 +40,21 @@ const Register = () => {
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectAuthLoading);
   const [success, setSuccess] = React.useState(false);
-  const [error, setError] = React.useState<false | string>(false);
-  const [state, setState] = React.useState<AuthMutation>({
-    email: '',
-    password: '',
-  });
-
   const [showPassword, setShowNewPassword] = React.useState(false);
+  const { user, inputChangeHandler } = useAuthHandler();
+  const { errorName, catchError } = useErrorHandler();
   const togglePass = () => setShowNewPassword(!showPassword);
-
-  const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setState((prevState) => ({ ...prevState, [name]: value }));
-  };
 
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    await dispatch(register(state))
+    await dispatch(register(user))
       .unwrap()
-      .then((result) => {
+      .then(() => {
         setSuccess(true);
       })
       .catch((e) => {
         console.log(e);
-        setError(MESSAGES.errorRegister);
+        catchError(MESSAGES.errorRegister);
       });
   };
 
@@ -98,7 +90,7 @@ const Register = () => {
                     name="email"
                     type="email"
                     autoComplete="new-email"
-                    value={state.email}
+                    value={user.email}
                     onChange={inputChangeHandler}
                     sx={{ width: '100%', color: '#000' }}
                   />
@@ -112,7 +104,7 @@ const Register = () => {
                     label="Пароль"
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="new-password"
-                    value={state.password}
+                    value={user.password}
                     onChange={inputChangeHandler}
                     sx={{ width: '100%', color: '#000' }}
                     InputProps={{
@@ -143,13 +135,13 @@ const Register = () => {
                 </Alert>
               </Grid>
             )}
-            {error && (
+            {errorName && (
               <Grid item xs={12} sx={{ alignItems: 'center' }}>
                 <Alert
                   severity="error"
                   sx={{ mt: 1, maxWidth: '100%', alignItems: 'center' }}
                 >
-                  {error}
+                  {errorName}
                 </Alert>
               </Grid>
             )}

@@ -17,10 +17,11 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { AuthMutation } from '../../types';
 import { login } from './usersThunks';
 import { MESSAGES, NAV_LINKS } from '../../utils/constants';
 import { selectAuthLoading } from '../Chat/chatsSlice';
+import { useErrorHandler } from '../../hooks/useErrorHandler';
+import { useAuthHandler } from '../../hooks/useAuthHandler';
 
 const TextField = styled(MuiTextField)(({ theme }) => ({
   '& .MuiFilledInput-root': {
@@ -38,30 +39,22 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const loading = useAppSelector(selectAuthLoading);
-  const [error, setError] = React.useState<false | string>(false);
-  const [state, setState] = React.useState<AuthMutation>({
-    email: '',
-    password: '',
-  });
-
   const [showPassword, setShowNewPassword] = React.useState(false);
-  const togglePass = () => setShowNewPassword(!showPassword);
+  const { user, inputChangeHandler } = useAuthHandler();
+  const { errorName, catchError } = useErrorHandler();
 
-  const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setState((prevState) => ({ ...prevState, [name]: value }));
-  };
+  const togglePass = () => setShowNewPassword(!showPassword);
 
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    await dispatch(login(state))
+    await dispatch(login(user))
       .unwrap()
-      .then((result) => {
+      .then(() => {
         navigate(NAV_LINKS.chat);
       })
       .catch((e) => {
         console.log(e);
-        setError(MESSAGES.errorLogin);
+        catchError(MESSAGES.errorLogin);
       });
   };
 
@@ -91,7 +84,7 @@ const Login = () => {
                 name="email"
                 type="email"
                 autoComplete="off"
-                value={state.email}
+                value={user.email}
                 onChange={inputChangeHandler}
                 sx={{ width: '100%', color: '#000' }}
               />
@@ -105,7 +98,7 @@ const Login = () => {
                 label="Пароль"
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="new-password"
-                value={state.password}
+                value={user.password}
                 onChange={inputChangeHandler}
                 sx={{ width: '100%', color: '#000' }}
                 InputProps={{
@@ -124,13 +117,13 @@ const Login = () => {
               />
             </Grid>
 
-            {error && (
+            {errorName && (
               <Grid item xs={12} sx={{ alignItems: 'center' }}>
                 <Alert
                   severity="error"
                   sx={{ mt: 1, maxWidth: '100%', alignItems: 'center' }}
                 >
-                  {error}
+                  {errorName}
                 </Alert>
               </Grid>
             )}
