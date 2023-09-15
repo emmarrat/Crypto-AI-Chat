@@ -33,6 +33,7 @@ import { getChatById } from '../../features/Chat/chatThunks';
 import SimpleBackdrop from '../SimpleBackdrop/SimpleBackdrop';
 
 const drawerWidth = 260;
+const smallScreenDrawerWidth = '92%';
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -43,6 +44,9 @@ const openedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
+  [theme.breakpoints.down('sm')]: {
+    width: smallScreenDrawerWidth,
+  },
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
