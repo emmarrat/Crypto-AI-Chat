@@ -2,7 +2,9 @@
 
 ## Main features:
 - In the chat demo, user can have a dialog with an AI bot about cryptocurrencies 💬💰
-- The user has a limited number of messages, for the demo version it is equal to 10 messages from the user 📝🔟
+- The user has a limited number of messages
+- Authorization with email and password
+- User receives pass-code for AI Crypto Chat in telegram-bot
 
 ## Stack:
 TypeScript, React, Axios, Redux-Toolkit, Material UI ⚙️🔧
