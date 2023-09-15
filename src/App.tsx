@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, CssBaseline, Typography } from '@mui/material';
-import { Link as RouterLink, Route, Routes } from 'react-router-dom';
+import { Link as RouterLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { NAV_LINKS } from './utils/constants';
 import Register from './features/User/Register';
 import Chat from './features/Chat/Chat';
@@ -11,6 +11,11 @@ import Login from './features/User/Login';
 
 function App() {
   const user = useAppSelector(selectUser);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate(NAV_LINKS.chat);
+  }, []);
   return (
     <>
       <CssBaseline />
