@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
 import { Button, Divider, IconButton, InputBase, Paper, Tooltip } from '@mui/material';
 import './Chat.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -18,6 +17,7 @@ import { COLORS, LIMIT_MESSAGES } from '../../utils/constants';
 import ChatModal from '../../components/ChatModal/ChatModal';
 import { sendMessage } from './chatThunks';
 import { ChatRequestBody } from '../../types';
+import Sidebar from '../../components/Sidebar/Sidebar';
 
 const Chat = () => {
   const dispatch = useAppDispatch();

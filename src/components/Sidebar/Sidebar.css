@@ -36,7 +36,6 @@
 }
 
 .sidebar__buttons {
-    margin-top: 30px;
     justify-content: space-between;
 }
 
@@ -48,4 +47,10 @@
 
 .sidebar__btn:hover {
     color: #48FF9E !important;
+}
+
+.MuiDrawer-paper {
+    background: #171717 !important;
+    color: #ffffff !important;
+    border: none !important;
 }

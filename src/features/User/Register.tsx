@@ -50,6 +50,7 @@ const Register = () => {
     await dispatch(register(user))
       .unwrap()
       .then(() => {
+        catchError(false);
         setSuccess(true);
       })
       .catch((e) => {
@@ -89,8 +90,8 @@ const Register = () => {
                     label="Email"
                     name="email"
                     type="email"
-                    autoComplete="new-email"
                     value={user.email}
+                    autoComplete="off"
                     onChange={inputChangeHandler}
                     sx={{ width: '100%', color: '#000' }}
                   />

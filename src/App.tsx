@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box, Button, CssBaseline, Typography } from '@mui/material';
-import { Link as RouterLink, Route, Routes, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, Route, Routes } from 'react-router-dom';
 import { NAV_LINKS } from './utils/constants';
 import Register from './features/User/Register';
 import Chat from './features/Chat/Chat';
@@ -8,19 +8,26 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { useAppSelector } from './app/hooks';
 import { selectUser } from './features/Chat/chatsSlice';
 import Login from './features/User/Login';
+import AppToolbar from './components/AppToolbar/AppToolbar';
+import Welcome from './components/Welcome/Welcome';
 
 function App() {
   const user = useAppSelector(selectUser);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    navigate(NAV_LINKS.chat);
-  }, []);
   return (
     <>
       <CssBaseline />
+      <header
+        style={{
+          display: user ? 'none' : 'block',
+        }}
+      >
+        <AppToolbar />
+      </header>
       <main>
         <Routes>
+          <Route path={NAV_LINKS.home} element={<Welcome />} />
+
           <Route path={NAV_LINKS.register} element={<Register />} />
           <Route
             path={NAV_LINKS.login}
