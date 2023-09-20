@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import './Sidebar.css';
 import logo from '../../assets/images/logo.svg';
 
@@ -25,7 +25,7 @@ import {
   startNewChat,
   unsetUser,
 } from '../../features/Chat/chatsSlice';
-import { getChatById } from '../../features/Chat/chatThunks';
+import { getAllChats, getChatById } from '../../features/Chat/chatThunks';
 import { Button, Drawer, Tooltip, useMediaQuery } from '@mui/material';
 import { COLORS, LIMIT_MESSAGES } from '../../utils/constants';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
@@ -99,9 +99,14 @@ const Sidebar: React.FC<Props> = ({ children }) => {
   const chatLoading = useAppSelector(selectFetchingChats);
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
   const drawerVariant = isSmallScreen ? 'temporary' : 'persistent';
   const drawerWidthStyle = isSmallScreen ? '300px' : drawerWidth;
+
+  useEffect(() => {
+    if (selectedChat.conversation.length > 1 && user) {
+      dispatch(getAllChats({ id: user.id }));
+    }
+  }, [dispatch, selectedChat, user]);
 
   const handleDrawerOpen = () => {
     setOpen(true);

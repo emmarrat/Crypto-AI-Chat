@@ -2,7 +2,7 @@ import { ConversationData, ConversationFull, MessageFull, User } from '../../typ
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import generateId from '../../generateId';
-import { getChatById, sendMessage } from './chatThunks';
+import { getAllChats, getChatById, sendMessage } from './chatThunks';
 import { login, register } from '../User/usersThunks';
 
 interface ChatState {
@@ -13,6 +13,7 @@ interface ChatState {
   totalMessages: number;
   user: User | null;
   authorizationLoading: boolean;
+  error: string;
 }
 
 const initialState: ChatState = {
@@ -23,6 +24,7 @@ const initialState: ChatState = {
   totalMessages: 0,
   user: null,
   authorizationLoading: false,
+  error: '',
 };
 
 export const chatsSlice = createSlice({
@@ -83,7 +85,7 @@ export const chatsSlice = createSlice({
         paid: user.paid,
         bill_date: user.bill_date,
       };
-      state.chatsHistory = user.conversations;
+      state.chatsHistory = user.conversations.reverse();
     });
     builder.addCase(register.rejected, (state) => {
       state.authorizationLoading = false;
@@ -117,6 +119,14 @@ export const chatsSlice = createSlice({
     });
     builder.addCase(getChatById.rejected, (state) => {
       state.fetching = false;
+    });
+
+    builder.addCase(getAllChats.fulfilled, (state, action) => {
+      if ('conversations' in action.payload) {
+        state.chatsHistory = action.payload.conversations.reverse();
+      } else if ('detail' in action.payload) {
+        state.error = action.payload.detail;
+      }
     });
   },
 });

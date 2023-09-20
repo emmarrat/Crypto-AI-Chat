@@ -78,3 +78,12 @@ export interface ChatFull extends ConversationId {
 export interface GlobalError {
   detail: string;
 }
+
+export interface AllChatsResponse {
+  id: string;
+  conversations: ConversationData[];
+}
+
+export interface BodyWithId {
+  id: string;
+}

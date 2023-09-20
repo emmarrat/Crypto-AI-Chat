@@ -1,10 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
+  AllChatsResponse,
+  BodyWithId,
   ChatFull,
   ChatFullData,
   ChatRequestBody,
   ChatResponse,
   ConversationId,
+  GlobalError,
   MessageFull,
 } from '../../types';
 import axiosApi from '../../axiosApi';
@@ -40,6 +43,19 @@ export const getChatById = createAsyncThunk<ChatFull, ConversationId>(
         conversation: newConversations,
       };
       return result;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+);
+
+export const getAllChats = createAsyncThunk<AllChatsResponse | GlobalError, BodyWithId>(
+  'chat/getAllChats',
+  async (body) => {
+    try {
+      const { data } = await axiosApi.post('/get_conversations_id', body);
+      return data as AllChatsResponse;
     } catch (error) {
       console.log(error);
       throw error;
