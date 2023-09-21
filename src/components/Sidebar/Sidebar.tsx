@@ -3,7 +3,7 @@ import { ReactNode, useEffect } from 'react';
 import './Sidebar.css';
 import logo from '../../assets/images/logo.svg';
 
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -26,7 +26,7 @@ import {
   unsetUser,
 } from '../../features/Chat/chatsSlice';
 import { getAllChats, getChatById } from '../../features/Chat/chatThunks';
-import { Button, Drawer, Tooltip, useMediaQuery } from '@mui/material';
+import { Button, Drawer, Tooltip } from '@mui/material';
 import { COLORS, LIMIT_MESSAGES } from '../../utils/constants';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
@@ -89,7 +89,6 @@ interface Props {
 }
 
 const Sidebar: React.FC<Props> = ({ children }) => {
-  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const dispatch = useAppDispatch();
   const historyList = useAppSelector(selectHistory);
@@ -97,10 +96,6 @@ const Sidebar: React.FC<Props> = ({ children }) => {
   const user = useAppSelector(selectUser);
   const selectedChat = useAppSelector(selectChat);
   const chatLoading = useAppSelector(selectFetchingChats);
-
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const drawerVariant = isSmallScreen ? 'temporary' : 'persistent';
-  const drawerWidthStyle = isSmallScreen ? '300px' : drawerWidth;
 
   useEffect(() => {
     if (selectedChat.conversation.length > 1 && user) {
@@ -157,14 +152,14 @@ const Sidebar: React.FC<Props> = ({ children }) => {
         </AppBar>
         <Drawer
           sx={{
-            width: drawerWidthStyle,
+            width: drawerWidth,
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: drawerWidthStyle,
+              width: drawerWidth,
               boxSizing: 'border-box',
             },
           }}
-          variant={drawerVariant}
+          variant="persistent"
           anchor="left"
           open={open}
         >

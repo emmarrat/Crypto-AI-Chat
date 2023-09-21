@@ -8,14 +8,30 @@
 
 @media screen and (max-width: 768px) {
     .chat__container {
-        margin-top: 78px;
+        /*margin-top: 78px;*/
     }
-    .chat__empty-msg, .chat__empty,  .chat__modal-text {
+
+    .chat__item-inner {
+        padding: 0
+    }
+
+    .chat__empty-msg, .chat__empty, .chat__modal-text, .chat__text {
         font-size: 12px;
     }
+
     .chat__modal-title, .chat__modal-inner-title {
         font-size: 14px;
     }
+
+    .chat__avatar {
+        width: 25px;
+        height: 25px;
+    }
+
+    .chat__avatar svg {
+        font-size: 1.2rem;
+    }
+
     .MuiDialog-container {
         width: 85% !important;
         margin: auto !important;

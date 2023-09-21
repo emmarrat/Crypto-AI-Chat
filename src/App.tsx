@@ -27,7 +27,6 @@ function App() {
       <main>
         <Routes>
           <Route path={NAV_LINKS.home} element={<Welcome />} />
-
           <Route path={NAV_LINKS.register} element={<Register />} />
           <Route
             path={NAV_LINKS.login}
