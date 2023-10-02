@@ -2,11 +2,18 @@ import React from 'react';
 import { Button, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { NAV_LINKS } from '../../utils/constants';
+import { useAppSelector } from '../../app/hooks';
+import { selectUser } from '../../features/Chat/chatsSlice';
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const user = useAppSelector(selectUser);
   const goToLogin = () => {
     navigate(NAV_LINKS.login);
+  };
+
+  const goToTheChat = () => {
+    navigate(NAV_LINKS.chat);
   };
 
   return (
@@ -28,8 +35,13 @@ const Welcome = () => {
         Для того, чтобы начать диалог, необходимо авторизироваться
       </Typography>
       <Grid item mt={5}>
-        <Button variant="contained" color="secondary" size="large" onClick={goToLogin}>
-          Войти
+        <Button
+          variant="contained"
+          color="secondary"
+          size="large"
+          onClick={user ? goToTheChat : goToLogin}
+        >
+          {user ? 'Перейти в чат' : 'Войти'}
         </Button>
       </Grid>
     </Grid>
