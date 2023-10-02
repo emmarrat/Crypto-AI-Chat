@@ -15,14 +15,15 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Navigate } from 'react-router-dom';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { register } from './usersThunks';
 import { MESSAGES, NAV_LINKS } from '../../utils/constants';
-import { selectAuthLoading } from '../Chat/chatsSlice';
+import { selectAuthLoading, selectUser } from '../Chat/chatsSlice';
 import { useErrorHandler } from '../../hooks/useErrorHandler';
 import { useAuthHandler } from '../../hooks/useAuthHandler';
+import AppToolbar from '../../components/AppToolbar/AppToolbar';
 
 const TextField = styled(MuiTextField)(({ theme }) => ({
   '& .MuiFilledInput-root': {
@@ -39,6 +40,7 @@ const TextField = styled(MuiTextField)(({ theme }) => ({
 const Register = () => {
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectAuthLoading);
+  const existingUser = useAppSelector(selectUser);
   const [success, setSuccess] = React.useState(false);
   const [showPassword, setShowNewPassword] = React.useState(false);
   const { user, inputChangeHandler } = useAuthHandler();
@@ -59,30 +61,53 @@ const Register = () => {
       });
   };
 
+  if (existingUser && !success) {
+    return <Navigate to={NAV_LINKS.chat} />;
+  }
+
   return (
-    <Container component="main" maxWidth="xs" sx={{ mt: '150px' }}>
-      <Box
-        style={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        {!success && (
-          <>
+    <>
+      <AppToolbar />
+      <Container component="main" maxWidth="xs" sx={{ mt: '150px' }}>
+        {success ? (
+          <Grid container gap={2}>
+            <Grid item xs={12}>
+              <Alert
+                severity="success"
+                sx={{ mt: 1, maxWidth: '100%', alignItems: 'center' }}
+              >
+                На вашу почту было отправлено письмо c кодом доступа для телеграм бота!
+              </Alert>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                fullWidth
+                variant="contained"
+                component={RouterLink}
+                to={NAV_LINKS.chat}
+                color="secondary"
+              >
+                Перейти в чат
+              </Button>
+            </Grid>
+          </Grid>
+        ) : (
+          <Box
+            style={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Регистрация
             </Typography>
-          </>
-        )}
-        <Box component="form" onSubmit={submitFormHandler} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            {!success && (
-              <>
+            <Box component="form" onSubmit={submitFormHandler} sx={{ mt: 3 }}>
+              <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -96,7 +121,6 @@ const Register = () => {
                     sx={{ width: '100%', color: '#000' }}
                   />
                 </Grid>
-
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -123,69 +147,44 @@ const Register = () => {
                     }}
                   />
                 </Grid>
-              </>
-            )}
+                {errorName && (
+                  <Grid item xs={12} sx={{ alignItems: 'center' }}>
+                    <Alert
+                      severity="error"
+                      sx={{ mt: 1, maxWidth: '100%', alignItems: 'center' }}
+                    >
+                      {errorName}
+                    </Alert>
+                  </Grid>
+                )}
 
-            {success && (
-              <Grid item xs={12}>
-                <Alert
-                  severity="success"
-                  sx={{ mt: 1, maxWidth: '100%', alignItems: 'center' }}
+                <LoadingButton
+                  type="submit"
+                  fullWidth
+                  loading={loading}
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2, ml: 2 }}
                 >
-                  На вашу почту было отправлено письмо c кодом доступа для телеграм бота!
-                </Alert>
-              </Grid>
-            )}
-            {errorName && (
-              <Grid item xs={12} sx={{ alignItems: 'center' }}>
-                <Alert
-                  severity="error"
-                  sx={{ mt: 1, maxWidth: '100%', alignItems: 'center' }}
-                >
-                  {errorName}
-                </Alert>
-              </Grid>
-            )}
-            {success ? (
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2, ml: 2, fontWeight: '600' }}
-                component={RouterLink}
-                to={NAV_LINKS.chat}
-                color="secondary"
-              >
-                Перейти в чат
-              </Button>
-            ) : (
-              <LoadingButton
-                type="submit"
-                fullWidth
-                loading={loading}
-                variant="contained"
-                sx={{ mt: 3, mb: 2, ml: 2 }}
-              >
-                Завершить регистрацию
-              </LoadingButton>
-            )}
-            {!success && (
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link
-                    component={RouterLink}
-                    to={NAV_LINKS.login}
-                    variant="body2"
-                    color="secondary"
-                  >
-                    Войти используя email и пароль
-                  </Link>
+                  Завершить регистрацию
+                </LoadingButton>
+                <Grid container justifyContent="flex-end">
+                  <Grid item>
+                    <Link
+                      component={RouterLink}
+                      to={NAV_LINKS.login}
+                      variant="body2"
+                      color="secondary"
+                    >
+                      Войти используя email и пароль
+                    </Link>
+                  </Grid>
                 </Grid>
               </Grid>
-            )}
-          </Grid>
-        </Box>
-      </Box>
-    </Container>
+            </Box>
+          </Box>
+        )}
+      </Container>
+    </>
   );
 };
 export default Register;

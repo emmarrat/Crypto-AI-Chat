@@ -31,9 +31,11 @@ const Welcome = () => {
         </Typography>{' '}
       </Typography>
       <Typography variant="h4">Я AI ассистент в сфере криптовалюты</Typography>
-      <Typography variant="body1">
-        Для того, чтобы начать диалог, необходимо авторизироваться
-      </Typography>
+      {!user && (
+        <Typography variant="body1">
+          Для того, чтобы начать диалог, необходимо авторизироваться
+        </Typography>
+      )}
       <Grid item mt={5}>
         <Button
           variant="contained"

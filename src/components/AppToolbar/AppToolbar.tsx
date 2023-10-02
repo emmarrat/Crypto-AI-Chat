@@ -2,6 +2,8 @@ import React from 'react';
 import { AppBar, Button, Grid, styled, Toolbar, Typography } from '@mui/material';
 import { Link as NavLink } from 'react-router-dom';
 import logo from '../../assets/images/logo.svg';
+import { useAppSelector } from '../../app/hooks';
+import { selectUser } from '../../features/Chat/chatsSlice';
 
 const Link = styled(NavLink)({
   color: '#fff',
@@ -13,6 +15,7 @@ const Link = styled(NavLink)({
 });
 
 const AppToolbar = () => {
+  const user = useAppSelector(selectUser);
   return (
     <AppBar
       position="sticky"
@@ -52,12 +55,16 @@ const AppToolbar = () => {
             xs={12}
             md={9}
           >
-            <Button component={NavLink} to="/register" color="inherit">
-              Регистрация
-            </Button>
-            <Button component={NavLink} to="/login" color="inherit">
-              Вход
-            </Button>
+            {!user && (
+              <>
+                <Button component={NavLink} to="/register" color="inherit">
+                  Регистрация
+                </Button>
+                <Button component={NavLink} to="/login" color="inherit">
+                  Вход
+                </Button>
+              </>
+            )}
           </Grid>
         </Grid>
       </Toolbar>

@@ -8,7 +8,6 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { useAppSelector } from './app/hooks';
 import { selectUser } from './features/Chat/chatsSlice';
 import Login from './features/User/Login';
-import AppToolbar from './components/AppToolbar/AppToolbar';
 import Welcome from './components/Welcome/Welcome';
 
 function App() {
@@ -17,13 +16,6 @@ function App() {
   return (
     <>
       <CssBaseline />
-      <header
-        style={{
-          display: user ? 'none' : 'block',
-        }}
-      >
-        <AppToolbar />
-      </header>
       <main>
         <Routes>
           <Route path={NAV_LINKS.home} element={<Welcome />} />
