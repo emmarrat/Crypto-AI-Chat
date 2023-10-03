@@ -106,7 +106,6 @@
     width: 100%;
     border: none !important;
     background: #444444 !important;
-    box-shadow: 22px 22px 31px #1a1a1a, -22px -22px 31px #2a2929 !important;
 }
 
 .chat__input {

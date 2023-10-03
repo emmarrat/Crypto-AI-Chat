@@ -15,12 +15,12 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { Link as RouterLink, Navigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { register } from './usersThunks';
 import { MESSAGES, NAV_LINKS } from '../../utils/constants';
-import { selectAuthLoading, selectUser } from '../Chat/chatsSlice';
+import { selectAuthLoading } from '../Chat/chatsSlice';
 import { useErrorHandler } from '../../hooks/useErrorHandler';
 import { useAuthHandler } from '../../hooks/useAuthHandler';
 import AppToolbar from '../../components/AppToolbar/AppToolbar';
@@ -40,7 +40,7 @@ const TextField = styled(MuiTextField)(({ theme }) => ({
 const Register = () => {
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectAuthLoading);
-  const existingUser = useAppSelector(selectUser);
+  // const existingUser = useAppSelector(selectUser);
   const [success, setSuccess] = React.useState(false);
   const [showPassword, setShowNewPassword] = React.useState(false);
   const { user, inputChangeHandler } = useAuthHandler();
@@ -61,9 +61,9 @@ const Register = () => {
       });
   };
 
-  if (existingUser && !success) {
-    return <Navigate to={NAV_LINKS.chat} />;
-  }
+  // if (!success && existingUser) {
+  //   return <Navigate to={NAV_LINKS.chat} />;
+  // }
 
   return (
     <>

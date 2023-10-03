@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { NAV_LINKS } from '../../utils/constants';
 import { useAppSelector } from '../../app/hooks';
 import { selectUser } from '../../features/Chat/chatsSlice';
+import AppToolbar from '../AppToolbar/AppToolbar';
 
 const Welcome = () => {
   const navigate = useNavigate();
@@ -17,36 +18,39 @@ const Welcome = () => {
   };
 
   return (
-    <Grid
-      container
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      height="80vh"
-    >
-      <Typography variant="h4">
-        Привет меня зовут{' '}
-        <Typography variant="h4" component="span" color="secondary">
-          Crypto Flexx чат-ассистент
-        </Typography>{' '}
-      </Typography>
-      <Typography variant="h4">Я AI ассистент в сфере криптовалюты</Typography>
-      {!user && (
-        <Typography variant="body1">
-          Для того, чтобы начать диалог, необходимо авторизироваться
+    <>
+      <AppToolbar />
+      <Grid
+        container
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        height="80vh"
+      >
+        <Typography variant="h4">
+          Привет меня зовут{' '}
+          <Typography variant="h4" component="span" color="secondary">
+            Crypto Flexx чат-ассистент
+          </Typography>{' '}
         </Typography>
-      )}
-      <Grid item mt={5}>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          onClick={user ? goToTheChat : goToLogin}
-        >
-          {user ? 'Перейти в чат' : 'Войти'}
-        </Button>
+        <Typography variant="h4">Я AI ассистент в сфере криптовалюты</Typography>
+        {!user && (
+          <Typography variant="body1">
+            Для того, чтобы начать диалог, необходимо авторизироваться
+          </Typography>
+        )}
+        <Grid item mt={5}>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            onClick={user ? goToTheChat : goToLogin}
+          >
+            {user ? 'Перейти в чат' : 'Войти'}
+          </Button>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 
