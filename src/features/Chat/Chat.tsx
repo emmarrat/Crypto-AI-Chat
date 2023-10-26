@@ -135,6 +135,7 @@ const Chat = () => {
             sx={{
               color: '#fff',
               border: 'none',
+              padding: '10px',
             }}
             disabled={totalMessages === LIMIT_MESSAGES}
           />
