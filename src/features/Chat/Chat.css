@@ -51,7 +51,7 @@
 }
 
 .chat__msg {
-    padding: 25px 15px;
+    padding: 15px;
     color: #fff;
 }
 
@@ -80,6 +80,7 @@
     margin: 0;
     display: flex;
     align-items: center;
+    font-size: 13px;
 }
 
 .chat__avatar {

@@ -21,6 +21,7 @@ export interface ConversationData {
   conversation_id: string;
   conversation_name: string;
 }
+
 export interface ConversationFull {
   conversation_id: string;
   conversation: MessageFull[];
@@ -33,12 +34,14 @@ export interface UserAuthResponse {
   bill_date: string;
   conversations: ConversationData[];
 }
+
 export interface User {
   id: string;
   email: string;
   paid: boolean;
   bill_date: string;
 }
+
 export interface Message {
   role: string;
   content: string;
@@ -48,16 +51,24 @@ export interface MessageFull extends Message {
   id: string;
 }
 
+// export interface ChatRequestBody {  // С полной версии
+//   id: string;
+//   prompt: string;
+//   conversation_id: string | null;
+// }
+
 export interface ChatRequestBody {
-  id: string;
   prompt: string;
-  conversation_id: string | null;
 }
 
+// export interface ChatResponse { // С полной версии
+//   id: string;
+//   reply: string;
+//   conversation_id: string;
+// }
+
 export interface ChatResponse {
-  id: string;
-  reply: string;
-  conversation_id: string;
+  response: string;
 }
 
 export interface ConversationId {

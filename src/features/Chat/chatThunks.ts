@@ -13,11 +13,24 @@ import {
 import axiosApi from '../../axiosApi';
 import generateId from '../../generateId';
 
+// export const sendMessage = createAsyncThunk<ChatResponse, ChatRequestBody>(
+//   'chat/sendMessage',
+//   async (body) => {
+//     try {
+//       const { data } = await axiosApi.post('/chat', body);
+//       return data;
+//     } catch (error) {
+//       console.log(error);
+//       throw error;
+//     }
+//   },
+// );
+
 export const sendMessage = createAsyncThunk<ChatResponse, ChatRequestBody>(
   'chat/sendMessage',
   async (body) => {
     try {
-      const { data } = await axiosApi.post('/chat', body);
+      const { data } = await axiosApi.post('/ask', body);
       return data;
     } catch (error) {
       console.log(error);

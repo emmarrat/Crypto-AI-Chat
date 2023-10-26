@@ -24,6 +24,7 @@ const theme: Theme = createTheme({
     fontFamily: 'Gilroy, serif',
     fontWeightRegular: 400,
     fontWeightBold: 700,
+    fontSize: 14,
   },
   components: {
     MuiGrid: {
