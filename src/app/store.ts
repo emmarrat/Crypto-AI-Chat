@@ -1,7 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { persistStore } from 'redux-persist';
 import {
   FLUSH,
   PAUSE,
@@ -12,14 +11,14 @@ import {
 } from 'redux-persist/es/constants';
 import { chatsReducer } from '../features/Chat/chatsSlice';
 
-const usersPersistConfig = {
-  key: 'crypto-chat:users',
-  storage,
-  whitelist: ['user', 'chatsHistory', 'selectedChat'],
-};
+// const usersPersistConfig = {
+//   key: 'crypto-chat:users',
+//   storage,
+//   whitelist: ['chatsHistory', 'selectedChat'],
+// };
 
 const rootReducer = combineReducers({
-  chats: persistReducer(usersPersistConfig, chatsReducer),
+  chats: chatsReducer,
 });
 
 export const store = configureStore({
