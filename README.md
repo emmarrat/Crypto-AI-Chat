@@ -1,10 +1,6 @@
 ## AI Crypto Chat (Demo version) 🤖
 
-## Main features:
-- In the chat demo, user can have a dialog with an AI bot about cryptocurrencies 💬💰
-- The user has a limited number of messages
-- Authorization with email and password
-- User receives pass-code for AI Crypto Chat in telegram-bot
+## Main feature: user can have a dialog with an AI bot about cryptocurrencies 💬💰
 
 ## Stack:
 TypeScript, React, Axios, Redux-Toolkit, Material UI ⚙️🔧
